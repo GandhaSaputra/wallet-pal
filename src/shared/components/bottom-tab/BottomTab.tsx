@@ -1,17 +1,17 @@
 import { tabs } from "@/src/constants/tabRoutes";
-import { Colors } from "@/src/constants/theme";
+import { Theme } from "@/src/constants/theme";
 import { ThemedView } from "@/src/shared/components/themed-view/ThemedView";
-import { useColorScheme } from "@/src/shared/hooks/useColorScheme";
+import { useTheme } from "@/src/shared/hooks/useThemeController";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { NavigationRoute, ParamListBase } from "@react-navigation/native";
-import React from "react";
+import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import BottomTabBarItem from "./BottomTabBarItem";
 
 const BottomTab = (props: BottomTabBarProps) => {
   const { state, navigation } = props;
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? "light"];
+  const theme = useTheme();
+  const styles = useMemo(() => createStyles({ theme }), [theme]);
 
   const onTabPress = (
     isActive: boolean,
@@ -37,8 +37,8 @@ const BottomTab = (props: BottomTabBarProps) => {
             ? tabs[index].iconFocusedName
             : tabs[index].iconUnfocusedName;
           const color = isActive
-            ? colors.tabIconSelected
-            : colors.tabIconDefault;
+            ? theme.colors.tabIconSelected
+            : theme.colors.tabIconDefault;
 
           return (
             <BottomTabBarItem
@@ -47,6 +47,7 @@ const BottomTab = (props: BottomTabBarProps) => {
               color={color}
               label={tabs[index].label}
               icon={icon}
+              isActive={isActive}
             />
           );
         })}
@@ -57,15 +58,19 @@ const BottomTab = (props: BottomTabBarProps) => {
 
 export default BottomTab;
 
-const styles = StyleSheet.create({
-  tabBarStyle: {
-    paddingTop: 8,
-    paddingBottom: 16,
-    borderTopWidth: 1,
-  },
-  tabBarContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-});
+const createStyles = ({ theme }: { theme: Theme }) =>
+  StyleSheet.create({
+    tabBarStyle: {
+      paddingTop: theme.spacing.sm,
+      paddingBottom: theme.spacing.xl,
+      backgroundColor: theme.colors.tabBar,
+      borderTopWidth: 1,
+      borderTopColor: theme.colors.border,
+      paddingHorizontal: theme.spacing.sm,
+    },
+    tabBarContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+  });

@@ -1,7 +1,8 @@
-import { Platform } from "react-native";
+import { Platform, TextStyle } from "react-native";
 
 export const BrandColors = {
   primary: "#5638F5",
+  primaryOpacity15: "rgba(95, 65, 245, 0.15)",
   primaryPressed: "#4329D9",
   primarySoft: "#EEF1FF",
   primaryBorder: "#9BA8FF",
@@ -77,6 +78,7 @@ export const Colors = {
     successCard: BrandColors.successSoft,
     warningCard: BrandColors.warningSoft,
     dangerCard: BrandColors.dangerSoft,
+    bottomBarSelectedWrapper: BrandColors.primarySoft,
   },
   dark: {
     brand: "#7C67FF",
@@ -114,8 +116,123 @@ export const Colors = {
     successCard: "#0E2B1D",
     warningCard: "#331F0E",
     dangerCard: "#35151B",
+    bottomBarSelectedWrapper: BrandColors.primaryOpacity15,
   },
 };
+
+export type AppThemeName = keyof typeof Colors;
+export type ThemeColors = (typeof Colors)[AppThemeName];
+
+type FontWeight = NonNullable<TextStyle["fontWeight"]>;
+
+function createFontStyle(
+  fontSize: number,
+  lineHeight: number,
+  fontWeight: FontWeight = "400",
+): TextStyle {
+  return {
+    fontSize,
+    lineHeight,
+    fontWeight,
+  };
+}
+
+export const fontStyles = {
+  regular: { fontWeight: "400" as FontWeight },
+  medium: { fontWeight: "500" as FontWeight },
+  semibold: { fontWeight: "600" as FontWeight },
+  bold: { fontWeight: "700" as FontWeight },
+  extraBold: { fontWeight: "800" as FontWeight },
+};
+
+export const typography = {
+  displayLarge: createFontStyle(40, 48, "800"),
+  displayMedium: createFontStyle(32, 40, "800"),
+  titleLarge: createFontStyle(28, 34, "800"),
+  titleMedium: createFontStyle(22, 28, "700"),
+  titleSmall: createFontStyle(18, 24, "700"),
+  bodyLarge: createFontStyle(18, 26),
+  bodyMedium: createFontStyle(16, 24),
+  bodySmall: createFontStyle(14, 20),
+  labelLarge: createFontStyle(16, 22, "700"),
+  labelMedium: createFontStyle(14, 20, "600"),
+  labelSmall: createFontStyle(12, 16, "600"),
+};
+
+export const spacing = {
+  xs: 4,
+  sm: 8,
+  md: 12,
+  default: 16,
+  lg: 20,
+  xl: 24,
+  "2xl": 32,
+  "3xl": 40,
+};
+
+export const iconSizes = {
+  sm: 16,
+  md: 20,
+  default: 24,
+  lg: 30,
+  xl: 32,
+  "2xl": 40,
+};
+
+export const borders = {
+  xs: 4,
+  sm: 6,
+  default: 8,
+  md: 12,
+  lg: 16,
+  xl: 20,
+  pill: 999,
+};
+
+export const radii = borders;
+
+export const shadows = {
+  card: {
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.08,
+    shadowRadius: 18,
+    elevation: 4,
+  },
+};
+
+export type Theme = {
+  name: AppThemeName;
+  isDark: boolean;
+  colors: ThemeColors;
+  fonts: typeof typography;
+  spacing: typeof spacing;
+  iconSizes: typeof iconSizes;
+  borders: typeof borders;
+  radii: typeof radii;
+  shadows: typeof shadows;
+};
+
+function createTheme(name: AppThemeName): Theme {
+  return {
+    name,
+    isDark: name === "dark",
+    colors: Colors[name],
+    fonts: typography,
+    spacing,
+    borders,
+    radii,
+    shadows,
+    iconSizes,
+  };
+}
+
+export const lightTheme = createTheme("light");
+export const darkTheme = createTheme("dark");
+
+export const AppThemes = {
+  light: lightTheme,
+  dark: darkTheme,
+} as const;
 
 export const CategoryColors = {
   food: BrandColors.food,

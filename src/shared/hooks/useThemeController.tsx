@@ -5,7 +5,12 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { ColorSchemeName, useColorScheme as useNativeColorScheme } from "react-native";
+import {
+  ColorSchemeName,
+  useColorScheme as useNativeColorScheme,
+} from "react-native";
+
+import { AppThemes, Theme } from "@/src/constants/theme";
 
 export type AppColorScheme = "light" | "dark";
 export type ThemePreference = AppColorScheme | "system";
@@ -13,6 +18,7 @@ export type ThemePreference = AppColorScheme | "system";
 type ThemeControllerValue = {
   colorScheme: AppColorScheme;
   preference: ThemePreference;
+  theme: Theme;
   setThemePreference: (preference: ThemePreference) => void;
   toggleTheme: () => void;
 };
@@ -34,17 +40,19 @@ export function ThemeControllerProvider({ children }: PropsWithChildren) {
   const nativeColorScheme = useNativeColorScheme();
   const [preference, setThemePreference] = useState<ThemePreference>("light");
   const colorScheme = resolveColorScheme(preference, nativeColorScheme);
+  const theme = AppThemes[colorScheme];
 
   const value = useMemo(
     () => ({
       colorScheme,
       preference,
+      theme,
       setThemePreference,
       toggleTheme: () => {
         setThemePreference(colorScheme === "dark" ? "light" : "dark");
       },
     }),
-    [colorScheme, preference],
+    [colorScheme, preference, theme],
   );
 
   return (
@@ -62,6 +70,10 @@ export function useThemeController() {
   }
 
   return context;
+}
+
+export function useTheme() {
+  return useThemeController().theme;
 }
 
 export function useResolvedColorScheme(): AppColorScheme {

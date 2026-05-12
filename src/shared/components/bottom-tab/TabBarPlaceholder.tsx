@@ -1,32 +1,34 @@
 import { StyleSheet, Text, View } from "react-native";
 
-import { Colors } from "@/src/constants/theme";
-import { useColorScheme } from "@/src/shared/hooks/useColorScheme";
+import { Theme } from "@/src/constants/theme";
+import { useTheme } from "@/src/shared/hooks/useThemeController";
 
 type TabPlaceholderProps = {
   title: string;
 };
 
 export function TabPlaceholder({ title }: TabPlaceholderProps) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? "light"];
+  const theme = useTheme();
+  const styles = createStyles(theme);
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>{title}</Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 24,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      padding: theme.spacing.xl,
+      backgroundColor: theme.colors.background,
+    },
+    title: {
+      ...theme.fonts.titleLarge,
+      color: theme.colors.text,
+    },
+  });
