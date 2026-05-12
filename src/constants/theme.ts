@@ -54,7 +54,7 @@ export const Colors = {
     warning: BrandColors.warning,
     danger: BrandColors.danger,
     text: NeutralColors.gray900,
-    textSecondary: NeutralColors.gray500,
+    textSecondary: NeutralColors.gray700,
     textMuted: NeutralColors.gray400,
     background: NeutralColors.gray50,
     surface: NeutralColors.white,
@@ -81,9 +81,9 @@ export const Colors = {
     bottomBarSelectedWrapper: BrandColors.primarySoft,
   },
   dark: {
-    brand: "#7C67FF",
-    primary: "#7C67FF",
-    primaryPressed: "#9B8BFF",
+    brand: BrandColors.primary,
+    primary: BrandColors.primary,
+    primaryPressed: BrandColors.primaryPressed,
     primarySoft: "#211D45",
     secondary: "#6EA8FF",
     accent: "#C084FC",
@@ -92,7 +92,7 @@ export const Colors = {
     warning: "#FF8A3D",
     danger: "#FF5A67",
     text: "#F7F7FB",
-    textSecondary: "#B7BDCB",
+    textSecondary: NeutralColors.gray300,
     textMuted: "#7E8798",
     background: "#0B1020",
     surface: "#12182A",
@@ -106,7 +106,7 @@ export const Colors = {
     tint: "#7C67FF",
     icon: "#B7BDCB",
     tabBar: "#111827",
-    tabIconDefault: "#8B93A5",
+    tabIconDefault: NeutralColors.gray400,
     tabIconSelected: "#8B7BFF",
     shadow: NeutralColors.black,
     progressTrack: "#2E245A",
@@ -130,34 +130,51 @@ function createFontStyle(
   lineHeight: number,
   fontWeight: FontWeight = "400",
 ): TextStyle {
-  return {
-    fontSize,
-    lineHeight,
-    fontWeight,
-  };
+  return { fontSize, lineHeight, fontWeight };
 }
 
-export const fontStyles = {
-  regular: { fontWeight: "400" as FontWeight },
-  medium: { fontWeight: "500" as FontWeight },
-  semibold: { fontWeight: "600" as FontWeight },
-  bold: { fontWeight: "700" as FontWeight },
-  extraBold: { fontWeight: "800" as FontWeight },
-};
-
 export const typography = {
+  // Display — for hero numbers, splash screen
   displayLarge: createFontStyle(40, 48, "800"),
   displayMedium: createFontStyle(32, 40, "800"),
+
+  // Title — section headings, page titles
   titleLarge: createFontStyle(28, 34, "800"),
   titleMedium: createFontStyle(22, 28, "700"),
   titleSmall: createFontStyle(18, 24, "700"),
-  bodyLarge: createFontStyle(18, 26),
-  bodyMedium: createFontStyle(16, 24),
-  bodySmall: createFontStyle(14, 20),
+
+  // Body — main content, descriptions
+  bodyLarge: createFontStyle(18, 26, "400"),
+  bodyLargeMedium: createFontStyle(18, 26, "500"),
+  bodyLargeSemibold: createFontStyle(18, 26, "600"),
+  bodyMedium: createFontStyle(16, 24, "400"),
+  bodyMediumMedium: createFontStyle(16, 24, "500"),
+  bodyMediumSemibold: createFontStyle(16, 24, "600"),
+  bodySmall: createFontStyle(14, 20, "400"),
+  bodySmallMedium: createFontStyle(14, 20, "500"),
+  bodySmallSemibold: createFontStyle(14, 20, "600"),
+
+  // Label — tags, badges, button text, captions
   labelLarge: createFontStyle(16, 22, "700"),
+  labelLargeMedium: createFontStyle(16, 22, "500"),
   labelMedium: createFontStyle(14, 20, "600"),
+  labelMediumMedium: createFontStyle(14, 20, "500"),
+  labelMediumSmall: createFontStyle(14, 20, "400"),
   labelSmall: createFontStyle(12, 16, "600"),
-};
+  labelSmallMedium: createFontStyle(12, 16, "500"),
+  labelSmallRegular: createFontStyle(12, 16, "400"),
+
+  // Caption — timestamps, hint text, footnotes
+  caption: createFontStyle(11, 16, "400"),
+  captionMedium: createFontStyle(11, 16, "500"),
+
+  // Numeric — amounts, balances, prices (tabular figures)
+  numericLarge: createFontStyle(28, 34, "700"),
+  numericMedium: createFontStyle(22, 28, "600"),
+  numericSmall: createFontStyle(16, 22, "600"),
+} satisfies Record<string, TextStyle>;
+
+export type TypographyVariant = keyof typeof typography;
 
 export const spacing = {
   xs: 4,
@@ -193,18 +210,58 @@ export const radii = borders;
 
 export const shadows = {
   card: {
+    shadowColor: NeutralColors.black,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.08,
     shadowRadius: 18,
     elevation: 4,
   },
+  sm: {
+    shadowColor: NeutralColors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  lg: {
+    shadowColor: NeutralColors.black,
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.12,
+    shadowRadius: 24,
+    elevation: 8,
+  },
 };
+
+export const Fonts = Platform.select({
+  ios: {
+    sans: "system-ui",
+    serif: "ui-serif",
+    rounded: "ui-rounded",
+    mono: "ui-monospace",
+  },
+  default: {
+    sans: "normal",
+    serif: "serif",
+    rounded: "normal",
+    mono: "monospace",
+  },
+  web: {
+    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    serif: "Georgia, 'Times New Roman', serif",
+    rounded:
+      "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
+    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+  },
+})!;
+
+export type FontFamily = typeof Fonts;
 
 export type Theme = {
   name: AppThemeName;
   isDark: boolean;
   colors: ThemeColors;
   fonts: typeof typography;
+  fontFamily: FontFamily;
   spacing: typeof spacing;
   iconSizes: typeof iconSizes;
   borders: typeof borders;
@@ -218,6 +275,7 @@ function createTheme(name: AppThemeName): Theme {
     isDark: name === "dark",
     colors: Colors[name],
     fonts: typography,
+    fontFamily: Fonts,
     spacing,
     borders,
     radii,
@@ -246,29 +304,3 @@ export const Gradients = {
   primaryCard: [BrandColors.primary, BrandColors.accentPurple],
   darkPrimaryCard: ["#4C35D8", "#7B1FEA"],
 } as const;
-
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: "system-ui",
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: "ui-serif",
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: "ui-rounded",
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: "ui-monospace",
-  },
-  default: {
-    sans: "normal",
-    serif: "serif",
-    rounded: "normal",
-    mono: "monospace",
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded:
-      "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-  },
-});

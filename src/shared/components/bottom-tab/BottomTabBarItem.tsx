@@ -26,7 +26,11 @@ const BottomTabBarItem = ({
   const styles = createStyles({ theme, isActive });
 
   return (
-    <TouchableOpacity onPress={onTabPress} style={styles.tabBarItem}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={onTabPress}
+      style={styles.tabBarItem}
+    >
       <View style={styles.wrapperItem}>
         <TabBarIcon name={icon} color={color} size={theme.iconSizes.default} />
         <ThemedText style={[styles.tabBarLabelStyle, { color }]}>
