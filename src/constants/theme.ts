@@ -1,4 +1,4 @@
-import { Platform, TextStyle } from "react-native";
+import { Platform, TextStyle, ViewStyle } from "react-native";
 
 export const BrandColors = {
   primary: "#5638F5",
@@ -25,7 +25,13 @@ export const BrandColors = {
 
 export const NeutralColors = {
   white: "#FFFFFF",
+  whiteOpacity50: "rgba(255, 255, 255, 0.5)",
+  whiteOpacity25: "rgba(255, 255, 255, 0.25)",
+  whiteOpacity10: "rgba(255, 255, 255, 0.10)",
   black: "#000000",
+  blackOpacity50: "rgba(0, 0, 0, 0.5)",
+  blackOpacity25: "rgba(0, 0, 0, 0.25)",
+  blackOpacity10: "rgba(0, 0, 0, 0.10)",
   gray25: "#FCFCFD",
   gray50: "#F9FAFB",
   gray100: "#F3F4F6",
@@ -79,6 +85,7 @@ export const Colors = {
     warningCard: BrandColors.warningSoft,
     dangerCard: BrandColors.dangerSoft,
     bottomBarSelectedWrapper: BrandColors.primarySoft,
+    white: NeutralColors.white,
   },
   dark: {
     brand: BrandColors.primary,
@@ -108,8 +115,8 @@ export const Colors = {
     tabBar: "#111827",
     tabIconDefault: NeutralColors.gray400,
     tabIconSelected: "#8B7BFF",
-    shadow: NeutralColors.black,
-    progressTrack: "#2E245A",
+    shadow: BrandColors.primary,
+    progressTrack: "#8E54EF",
     progressFill: "#7C67FF",
     chartGrid: "#202A40",
     aiCard: "#122747",
@@ -117,6 +124,7 @@ export const Colors = {
     warningCard: "#331F0E",
     dangerCard: "#35151B",
     bottomBarSelectedWrapper: BrandColors.primaryOpacity15,
+    white: NeutralColors.white,
   },
 };
 
@@ -208,20 +216,65 @@ export const borders = {
 
 export const radii = borders;
 
+export const flexStyles = {
+  rowStartCenter: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+  },
+  rowStartBetween: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+  },
+  rowCenterCenter: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  rowCenterBetween: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  columnStartCenter: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+  },
+  columnCenterCenter: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  columnCenterBetween: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+} satisfies Record<string, ViewStyle>;
+
 export const shadows = {
   card: {
     shadowColor: NeutralColors.black,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.25,
     shadowRadius: 18,
-    elevation: 4,
+    elevation: 8,
+  },
+  button: {
+    shadowColor: NeutralColors.black,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 6,
   },
   sm: {
     shadowColor: NeutralColors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 6,
-    elevation: 2,
+    elevation: 4,
   },
   lg: {
     shadowColor: NeutralColors.black,
@@ -267,6 +320,7 @@ export type Theme = {
   borders: typeof borders;
   radii: typeof radii;
   shadows: typeof shadows;
+  flex: typeof flexStyles;
 };
 
 function createTheme(name: AppThemeName): Theme {
@@ -281,6 +335,7 @@ function createTheme(name: AppThemeName): Theme {
     radii,
     shadows,
     iconSizes,
+    flex: flexStyles,
   };
 }
 
@@ -301,6 +356,10 @@ export const CategoryColors = {
 } as const;
 
 export const Gradients = {
-  primaryCard: [BrandColors.primary, BrandColors.accentPurple],
+  primaryCard: [
+    BrandColors.primaryPressed,
+    BrandColors.primary,
+    BrandColors.accentPurple,
+  ],
   darkPrimaryCard: ["#4C35D8", "#7B1FEA"],
 } as const;

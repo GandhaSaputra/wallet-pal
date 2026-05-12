@@ -27,7 +27,7 @@ const BottomTabBarItem = ({
 
   return (
     <TouchableOpacity
-      activeOpacity={0.8}
+      activeOpacity={0.7}
       onPress={onTabPress}
       style={styles.tabBarItem}
     >

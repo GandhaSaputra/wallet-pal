@@ -1,7 +1,7 @@
 import { NeutralColors, Theme } from "@/src/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { useMemo } from "react";
+import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "../../hooks/useThemeController";
 import { ThemedText } from "../themed-text/ThemedText";
@@ -9,7 +9,10 @@ import { ThemedText } from "../themed-text/ThemedText";
 const HomeHeader = () => {
   const insets = useSafeAreaInsets();
   const theme = useTheme();
-  const styles = createStyles({ theme, insets });
+  const styles = useMemo(
+    () => createStyles({ theme, insets }),
+    [theme, insets],
+  );
 
   const username = "Sarah";
   const title = `Hello, ${username}! 👋`;
@@ -21,7 +24,7 @@ const HomeHeader = () => {
         <ThemedText type="titleMedium">{title}</ThemedText>
         <ThemedText colorVariant="textSecondary">{subtitle}</ThemedText>
       </View>
-      <TouchableOpacity activeOpacity={0.8} style={styles.addButton}>
+      <TouchableOpacity activeOpacity={0.7} style={styles.addButton}>
         <Ionicons
           name="add"
           size={theme.iconSizes.default}
@@ -46,11 +49,17 @@ const createStyles = ({
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      paddingTop: insets.top,
+      paddingTop: Platform.select({
+        android: insets.top + theme.spacing.xl,
+        ios: insets.top + theme.spacing.sm,
+        web: theme.spacing.default,
+      }),
     },
     addButton: {
       padding: theme.spacing.sm,
       borderRadius: theme.radii.md,
       backgroundColor: theme.colors.primary,
+      ...theme.shadows.button,
+      shadowColor: theme.colors.shadow,
     },
   });
