@@ -1,5 +1,5 @@
 export type BudgetSummaryData = {
-  currency: string;
+  currencyCode?: string; // ISO 4217 — opsional, fallback ke device currency
   totalSpentThisMonth: number;
   budgetThisMonth: number;
   daysLeft: number;

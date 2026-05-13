@@ -2,7 +2,9 @@ import { Gradients, spacing } from "@/src/constants/theme";
 import Spacer from "@/src/shared/components/spacer/Spacer";
 import { ThemedText } from "@/src/shared/components/themed-text/ThemedText";
 import { useTheme } from "@/src/shared/hooks/useThemeController";
+import { formatCurrency } from "@/src/shared/utils/formatCurrency";
 import { LinearGradient } from "expo-linear-gradient";
+import { getLocales } from "expo-localization";
 import React, { useMemo } from "react";
 import { View } from "react-native";
 import { BudgetSummaryCardProps } from ".";
@@ -13,7 +15,6 @@ const GRADIENT_END = { x: 1, y: 1 };
 
 const BudgetSummaryCard = React.memo(
   ({
-    currency,
     totalSpentThisMonth,
     budgetThisMonth,
     daysLeft,
@@ -21,16 +22,23 @@ const BudgetSummaryCard = React.memo(
     const theme = useTheme();
     const styles = useMemo(() => createStyles({ theme }), [theme]);
 
+    const deviceCurrencySymbol = getLocales()[0]?.currencySymbol ?? "$";
     const remainingBudget = budgetThisMonth - totalSpentThisMonth;
     const percentageUsed = (totalSpentThisMonth / budgetThisMonth) * 100;
     const clampedPercentage = Math.min(Math.max(percentageUsed, 0), 100);
+    const isOverBudget = remainingBudget < 0;
 
-    const labelTotalSpentThisMonth = `Total spent this month`;
-    const textBudget = `Budget: ${currency}${budgetThisMonth.toLocaleString()}`;
-    const textRemaining = `Remaining: ${currency}${remainingBudget.toLocaleString()}`;
+    const textAmountTotalSpentThisMonth = formatCurrency({
+      amount: totalSpentThisMonth,
+    });
+    const textBudget = `Budget: ${formatCurrency({
+      amount: budgetThisMonth,
+    })}`;
+    const textRemaining = isOverBudget
+      ? `Over: ${formatCurrency({ amount: Math.abs(remainingBudget) })}`
+      : `Remaining: ${formatCurrency({ amount: remainingBudget })}`;
     const textUsed = `${percentageUsed.toFixed(1)}% used`;
     const textDayLeft = `${daysLeft} days left`;
-    const textAmountTotalSpentThisMonth = `${currency}${totalSpentThisMonth.toLocaleString()}`;
 
     return (
       <View style={styles.shadowContainer}>
@@ -43,7 +51,7 @@ const BudgetSummaryCard = React.memo(
           <View style={theme.flex.rowCenterBetween}>
             <View>
               <ThemedText colorVariant="white">
-                {labelTotalSpentThisMonth}
+                Total spent this month
               </ThemedText>
               <Spacer height={spacing.xs} />
               <ThemedText type="numericLarge" colorVariant="white">
@@ -52,7 +60,7 @@ const BudgetSummaryCard = React.memo(
             </View>
             <View style={styles.currencyContainer}>
               <ThemedText type="displayMedium" colorVariant="white">
-                {currency}
+                {deviceCurrencySymbol}
               </ThemedText>
             </View>
           </View>
