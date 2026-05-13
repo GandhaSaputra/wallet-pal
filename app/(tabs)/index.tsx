@@ -2,6 +2,7 @@ import { ScrollView, StyleSheet } from "react-native";
 
 import { Theme } from "@/src/constants/theme";
 import SpendingByCategoryCard from "@/src/features/analytics/components/SpendingByCategoryCard";
+import BudgetInsightRow from "@/src/features/budget/components/BudgetInsightRow";
 import BudgetSummaryCard from "@/src/features/budget/components/BudgetSummaryCard";
 import RecentTransactionsCard from "@/src/features/transaction/components/RecentTransactionsCard";
 import { MOCK_SPENDING } from "@/src/mocks/analytics";
@@ -34,6 +35,8 @@ export default function HomeScreen() {
           transactions={MOCK_TRANSACTIONS}
           onViewAll={() => router.push("/search")}
         />
+        <Spacer height={theme.spacing.xl} />
+        <BudgetInsightRow vsLastMonthPercentage={8.5} daysLeft={9} />
         <Spacer height={theme.spacing.xl} />
       </ScrollView>
     </ThemedView>
