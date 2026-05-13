@@ -60,7 +60,7 @@ export const Colors = {
     warning: BrandColors.warning,
     danger: BrandColors.danger,
     text: NeutralColors.gray900,
-    textSecondary: NeutralColors.gray700,
+    textSecondary: NeutralColors.gray600,
     textMuted: NeutralColors.gray400,
     background: NeutralColors.gray50,
     surface: NeutralColors.white,
@@ -257,9 +257,9 @@ export const flexStyles = {
 export const shadows = {
   card: {
     shadowColor: NeutralColors.black,
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.25,
-    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
     elevation: 8,
   },
   button: {
@@ -271,8 +271,8 @@ export const shadows = {
   },
   sm: {
     shadowColor: NeutralColors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
     shadowRadius: 6,
     elevation: 4,
   },

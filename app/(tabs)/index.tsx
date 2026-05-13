@@ -1,7 +1,10 @@
 import { StyleSheet } from "react-native";
 
 import { Theme } from "@/src/constants/theme";
+import SpendingByCategoryCard from "@/src/features/analytics/components/SpendingByCategoryCard";
 import BudgetSummaryCard from "@/src/features/budget/components/BudgetSummaryCard";
+import { MOCK_SPENDING } from "@/src/mocks/analytics";
+import { MOCK_BUDGET } from "@/src/mocks/budget";
 import HomeHeader from "@/src/shared/components/header/HomeHeader";
 import Spacer from "@/src/shared/components/spacer/Spacer";
 import { ThemedView } from "@/src/shared/components/themed-view/ThemedView";
@@ -15,12 +18,9 @@ export default function HomeScreen() {
     <ThemedView style={styles.container}>
       <HomeHeader />
       <Spacer height={theme.spacing.xl} />
-      <BudgetSummaryCard
-        currency="$"
-        totalSpentThisMonth={2847}
-        budgetThisMonth={3500}
-        daysLeft={9}
-      />
+      <BudgetSummaryCard {...MOCK_BUDGET} />
+      <Spacer height={theme.spacing.xl} />
+      <SpendingByCategoryCard items={MOCK_SPENDING} month="January 2025" />
     </ThemedView>
   );
 }
