@@ -15,9 +15,11 @@ const SpendingByCategoryCard = React.memo(
     return (
       <View style={styles.container}>
         <View style={[theme.flex.rowCenterBetween, styles.header]}>
-          <ThemedText type="titleSmall">Spending by Category</ThemedText>
+          <ThemedText type="bodyMediumSemibold">
+            Spending by Category
+          </ThemedText>
           <View style={styles.monthBadge}>
-            <ThemedText type="labelSmall" colorVariant="textSecondary">
+            <ThemedText type="labelSmall" colorVariant="text">
               {month}
             </ThemedText>
           </View>

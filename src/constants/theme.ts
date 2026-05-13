@@ -6,6 +6,7 @@ export const BrandColors = {
   primaryPressed: "#4329D9",
   primarySoft: "#EEF1FF",
   primaryBorder: "#9BA8FF",
+  primaryText: "#7C67FF",
   secondary: "#2F80ED",
   accentPurple: "#A020F0",
   aiBlue: "#0B57FF",
@@ -60,7 +61,8 @@ export const Colors = {
     warning: BrandColors.warning,
     danger: BrandColors.danger,
     text: NeutralColors.gray900,
-    textSecondary: NeutralColors.gray600,
+    textPrimary: BrandColors.primary,
+    textSecondary: NeutralColors.gray500,
     textMuted: NeutralColors.gray400,
     background: NeutralColors.gray50,
     surface: NeutralColors.white,
@@ -99,6 +101,7 @@ export const Colors = {
     warning: "#FF8A3D",
     danger: "#FF5A67",
     text: "#F7F7FB",
+    textPrimary: BrandColors.primaryText,
     textSecondary: NeutralColors.gray300,
     textMuted: "#7E8798",
     background: "#0B1020",
@@ -110,11 +113,11 @@ export const Colors = {
     borderStrong: "#35405C",
     input: "#101729",
     inputBorder: "#35405C",
-    tint: "#7C67FF",
+    tint: BrandColors.primary,
     icon: "#B7BDCB",
     tabBar: "#111827",
     tabIconDefault: NeutralColors.gray400,
-    tabIconSelected: "#8B7BFF",
+    tabIconSelected: BrandColors.primaryText,
     shadow: BrandColors.primary,
     progressTrack: "#8E54EF",
     progressFill: "#7C67FF",
@@ -217,10 +220,15 @@ export const borders = {
 export const radii = borders;
 
 export const flexStyles = {
-  rowStartCenter: {
+  rowStartStart: {
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "flex-start",
+  },
+  rowStartCenter: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "center",
   },
   rowStartBetween: {
     flexDirection: "row",
@@ -231,6 +239,11 @@ export const flexStyles = {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+  },
+  rowCenterStart: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   rowCenterBetween: {
     flexDirection: "row",
@@ -268,6 +281,13 @@ export const shadows = {
     shadowOpacity: 0.2,
     shadowRadius: 12,
     elevation: 6,
+  },
+  xs: {
+    shadowColor: NeutralColors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 0.08,
+    elevation: 2,
   },
   sm: {
     shadowColor: NeutralColors.black,

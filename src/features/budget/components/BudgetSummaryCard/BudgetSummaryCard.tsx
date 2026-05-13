@@ -54,7 +54,7 @@ const BudgetSummaryCard = React.memo(
                 Total spent this month
               </ThemedText>
               <Spacer height={spacing.xs} />
-              <ThemedText type="numericLarge" colorVariant="white">
+              <ThemedText type="displayMedium" colorVariant="white">
                 {textAmountTotalSpentThisMonth}
               </ThemedText>
             </View>
