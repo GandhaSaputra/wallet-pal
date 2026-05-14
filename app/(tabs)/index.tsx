@@ -17,7 +17,7 @@ import { useRouter } from "expo-router";
 export default function HomeScreen() {
   const router = useRouter();
   const theme = useTheme();
-  const styles = createStyles(theme);
+  const styles = createStyles({ theme });
 
   return (
     <ThemedView style={styles.container}>
@@ -43,7 +43,7 @@ export default function HomeScreen() {
   );
 }
 
-const createStyles = (theme: Theme) =>
+const createStyles = ({ theme }: { theme: Theme }) =>
   StyleSheet.create({
     container: {
       flex: 1,

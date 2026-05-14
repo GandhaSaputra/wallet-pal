@@ -1,3 +1,5 @@
+import { useColorScheme } from "@/src/shared/hooks/useColorScheme";
+import { ThemeControllerProvider } from "@/src/shared/hooks/useThemeController";
 import {
   DarkTheme,
   DefaultTheme,
@@ -5,10 +7,8 @@ import {
 } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import "react-native-reanimated";
-
-import { useColorScheme } from "@/src/shared/hooks/useColorScheme";
-import { ThemeControllerProvider } from "@/src/shared/hooks/useThemeController";
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -35,8 +35,10 @@ function RootNavigator() {
 
 export default function RootLayout() {
   return (
-    <ThemeControllerProvider>
-      <RootNavigator />
-    </ThemeControllerProvider>
+    <KeyboardProvider>
+      <ThemeControllerProvider>
+        <RootNavigator />
+      </ThemeControllerProvider>
+    </KeyboardProvider>
   );
 }
