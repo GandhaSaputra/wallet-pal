@@ -39,6 +39,6 @@ export const createStyles = ({
       fontSize: 28,
       fontWeight: "700",
       color: theme.colors.text,
-      outline: "none",
+      // outlineStyle: "none",
     },
   });

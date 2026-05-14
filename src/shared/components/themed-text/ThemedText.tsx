@@ -6,7 +6,7 @@ import {
 import { useThemeColor } from "@/src/shared/hooks/useThemeColor";
 import { StyleSheet, Text, type TextProps } from "react-native";
 
-export type ThemedTextType = TypographyVariant | "link";
+export type ThemedTextType = TypographyVariant | "title" | "subtitle" | "link";
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
@@ -60,13 +60,29 @@ export function ThemedText({
     <Text
       style={[
         { color },
-        type === "link" ? styles.link : typography[type],
+        type === "link" ? styles.link : getTypographyStyle(type),
         dynamicStyle,
         style,
       ]}
       {...rest}
     />
   );
+}
+
+function getTypographyStyle(type: ThemedTextType) {
+  if (type === "title") {
+    return typography.titleLarge;
+  }
+
+  if (type === "subtitle") {
+    return typography.titleMedium;
+  }
+
+  if (type === "link") {
+    return styles.link;
+  }
+
+  return typography[type];
 }
 
 const styles = StyleSheet.create({

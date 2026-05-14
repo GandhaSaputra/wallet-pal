@@ -174,7 +174,7 @@ export const typography = {
   // Label — tags, badges, button text, captions
   labelLarge: createFontStyle(16, 22, "700"),
   labelLargeMedium: createFontStyle(16, 22, "500"),
-  labelMedium: createFontStyle(14, 20, "600"),
+  labelMediumSemibold: createFontStyle(14, 20, "600"),
   labelMediumMedium: createFontStyle(14, 20, "500"),
   labelMediumSmall: createFontStyle(14, 20, "400"),
   labelSmall: createFontStyle(12, 16, "600"),

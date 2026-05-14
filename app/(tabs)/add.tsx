@@ -1,5 +1,11 @@
+import {
+  TRANSACTION_CATEGORIES,
+  TransactionCategoryId,
+} from "@/src/constants/categories";
 import { Theme } from "@/src/constants/theme";
 import ScanReceiptCard from "@/src/features/ai/components/ScanReceiptCard";
+import CategoryPicker from "@/src/features/transaction/components/CategoryPicker";
+import DescriptionInputCard from "@/src/features/transaction/components/DescriptionInputCard";
 import AmountInput from "@/src/shared/components/amount-input/AmountInput";
 import Spacer from "@/src/shared/components/spacer/Spacer";
 import { ThemedView } from "@/src/shared/components/themed-view/ThemedView";
@@ -18,9 +24,16 @@ export default function AddScreen() {
   );
 
   const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
+  const [selectedCategoryId, setSelectedCategoryId] =
+    useState<TransactionCategoryId>("foodDining");
 
   const handleScanReceipt = () => {
     // TODO: integrate camera / AI OCR
+  };
+
+  const handleApplySuggestion = () => {
+    setSelectedCategoryId("foodDining");
   };
 
   return (
@@ -32,6 +45,22 @@ export default function AddScreen() {
         <ScanReceiptCard onScan={handleScanReceipt} />
         <Spacer height={theme.spacing.xl} />
         <AmountInput value={amount} onChangeText={setAmount} required />
+        <Spacer height={theme.spacing.xl} />
+        <DescriptionInputCard
+          value={description}
+          onChangeText={setDescription}
+          suggestion="This looks like a Food & Dining expense"
+          onApplySuggestion={handleApplySuggestion}
+          required
+        />
+        <Spacer height={theme.spacing.xl} />
+        <CategoryPicker
+          categories={TRANSACTION_CATEGORIES}
+          selectedCategoryId={selectedCategoryId}
+          onSelectCategory={setSelectedCategoryId}
+          required
+        />
+        <Spacer height={theme.spacing.xl} />
       </KeyboardAwareScrollView>
     </ThemedView>
   );
