@@ -4,8 +4,11 @@ import {
 } from "@/src/constants/categories";
 import { Theme } from "@/src/constants/theme";
 import ScanReceiptCard from "@/src/features/ai/components/ScanReceiptCard";
+import AddExpenseButton from "@/src/features/transaction/components/AddExpenseButton";
 import CategoryPicker from "@/src/features/transaction/components/CategoryPicker";
 import DescriptionInputCard from "@/src/features/transaction/components/DescriptionInputCard";
+import NotesInputCard from "@/src/features/transaction/components/NotesInputCard";
+import TransactionMetaFields from "@/src/features/transaction/components/TransactionMetaFields";
 import AmountInput from "@/src/shared/components/amount-input/AmountInput";
 import Spacer from "@/src/shared/components/spacer/Spacer";
 import { ThemedView } from "@/src/shared/components/themed-view/ThemedView";
@@ -25,6 +28,7 @@ export default function AddScreen() {
 
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
+  const [notes, setNotes] = useState("");
   const [selectedCategoryId, setSelectedCategoryId] =
     useState<TransactionCategoryId>("foodDining");
 
@@ -36,11 +40,24 @@ export default function AddScreen() {
     setSelectedCategoryId("foodDining");
   };
 
+  const handleSelectDate = () => {
+    // TODO: open date picker
+  };
+
+  const handleSelectPayment = () => {
+    // TODO: open payment method picker
+  };
+
+  const handleAddExpense = () => {
+    // TODO: validate and persist transaction
+  };
+
   return (
     <ThemedView style={styles.container}>
       <KeyboardAwareScrollView
         style={styles.scrollContainer}
         contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={false}
       >
         <ScanReceiptCard onScan={handleScanReceipt} />
         <Spacer height={theme.spacing.xl} />
@@ -60,6 +77,17 @@ export default function AddScreen() {
           onSelectCategory={setSelectedCategoryId}
           required
         />
+        <Spacer height={theme.spacing.xl} />
+        <TransactionMetaFields
+          dateLabel="Jan 30, 2025"
+          paymentLabel="Credit Card"
+          onPressDate={handleSelectDate}
+          onPressPayment={handleSelectPayment}
+        />
+        <Spacer height={theme.spacing.xl} />
+        <NotesInputCard value={notes} onChangeText={setNotes} />
+        <Spacer height={theme.spacing.xl} />
+        <AddExpenseButton onPress={handleAddExpense} />
         <Spacer height={theme.spacing.xl} />
       </KeyboardAwareScrollView>
     </ThemedView>
