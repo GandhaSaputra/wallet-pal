@@ -15,6 +15,13 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
     contentContainer: {
       flex: 1,
       padding: theme.spacing.default,
+      backgroundColor: theme.colors.background,
+    },
+    indicatorStyle: {
+      backgroundColor: theme.colors.reverseBackground,
+    },
+    containerIndicatorStyle: {
+      backgroundColor: theme.colors.background,
     },
     header: {
       paddingBottom: theme.spacing.default,

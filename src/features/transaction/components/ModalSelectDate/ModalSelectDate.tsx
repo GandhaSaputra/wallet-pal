@@ -77,6 +77,7 @@ const ModalSelectDate = React.memo(
       const renderBackdrop = (backdropProps: any) => {
         return (
           <BottomSheetBackdrop
+            opacity={0.7}
             {...backdropProps}
             appearsOnIndex={0}
             disappearsOnIndex={-1}
@@ -88,8 +89,9 @@ const ModalSelectDate = React.memo(
         <BottomSheetModal
           ref={bottomSheetModalRef}
           backdropComponent={renderBackdrop}
-          enablePanDownToClose={true}
-          enableDynamicSizing={true}
+          enableContentPanningGesture={false}
+          handleIndicatorStyle={styles.indicatorStyle}
+          handleStyle={styles.containerIndicatorStyle}
         >
           <BottomSheetView style={styles.contentContainer}>
             <View style={styles.header}>

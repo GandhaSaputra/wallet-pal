@@ -1,5 +1,5 @@
 import { ThemedText } from "@/src/shared/components/themed-text/ThemedText";
-import { useTheme } from "@/src/shared/hooks/useThemeController";
+import { useThemeController } from "@/src/shared/hooks/useThemeController";
 import { Ionicons } from "@expo/vector-icons";
 import {
   BottomSheetBackdrop,
@@ -29,7 +29,7 @@ interface ModalRef {
 const ModalSelectPayment = React.memo(
   React.forwardRef<ModalRef, ModalSelectPaymentProps>(
     ({ selectedPaymentId, onSelect }, ref) => {
-      const theme = useTheme();
+      const { theme } = useThemeController();
       const styles = useMemo(() => createStyles({ theme }), [theme]);
       const bottomSheetModalRef = useRef<BottomSheetModal>(null);
       const [draftPaymentId, setDraftPaymentId] =
@@ -67,6 +67,7 @@ const ModalSelectPayment = React.memo(
         return (
           <BottomSheetBackdrop
             {...backdropProps}
+            opacity={0.7}
             appearsOnIndex={0}
             disappearsOnIndex={-1}
           />
@@ -79,6 +80,8 @@ const ModalSelectPayment = React.memo(
           backdropComponent={renderBackdrop}
           enablePanDownToClose={true}
           enableDynamicSizing={true}
+          handleIndicatorStyle={styles.indicatorStyle}
+          handleStyle={styles.containerIndicatorStyle}
         >
           <BottomSheetView style={styles.contentContainer}>
             <View style={styles.header}>

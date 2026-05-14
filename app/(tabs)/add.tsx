@@ -107,7 +107,7 @@ export default function AddScreen() {
         <NotesInputCard value={notes} onChangeText={setNotes} />
         <Spacer height={theme.spacing.xl} />
         <AddExpenseButton onPress={handleAddExpense} />
-        <Spacer height={theme.spacing.xl} />
+        <Spacer height={Platform?.OS === "android" ? 80 : theme.spacing.xl} />
       </KeyboardAwareScrollView>
       <ModalSelectDate
         ref={dateSheetRef}

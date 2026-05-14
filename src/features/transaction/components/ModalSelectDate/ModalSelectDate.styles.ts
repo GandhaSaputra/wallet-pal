@@ -6,6 +6,7 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
     contentContainer: {
       flex: 1,
       padding: theme.spacing.default,
+      backgroundColor: theme.colors.background,
     },
     pickerContainer: {
       alignItems: "center",
@@ -16,8 +17,11 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
     listContent: {
       gap: theme.spacing.sm,
     },
-    picker: {
-      // marginBottom: theme.spacing.lg,
+    indicatorStyle: {
+      backgroundColor: theme.colors.reverseBackground,
+    },
+    containerIndicatorStyle: {
+      backgroundColor: theme.colors.background,
     },
     pickerText: {
       color: theme.colors.text,
