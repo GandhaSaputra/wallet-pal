@@ -17,7 +17,7 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
       gap: theme.spacing.sm,
     },
     picker: {
-      marginBottom: theme.spacing.lg,
+      // marginBottom: theme.spacing.lg,
     },
     pickerText: {
       color: theme.colors.text,
@@ -26,7 +26,6 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
     pickerOverlay: {
       backgroundColor: theme.colors.primarySoft,
       borderRadius: theme.radii.md,
-      borderWidth: 1,
       borderColor: theme.colors.primaryBorder,
     },
     selectButton: {

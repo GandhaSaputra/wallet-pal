@@ -102,7 +102,6 @@ const ModalSelectDate = React.memo(
                 itemHeight={44}
                 visibleItemCount={5}
                 enableScrollByTapOnItem
-                pickerStyle={styles.picker}
                 itemTextStyle={styles.pickerText}
                 overlayItemStyle={styles.pickerOverlay}
               />
