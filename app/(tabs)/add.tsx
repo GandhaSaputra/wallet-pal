@@ -7,18 +7,32 @@ import ScanReceiptCard from "@/src/features/ai/components/ScanReceiptCard";
 import AddExpenseButton from "@/src/features/transaction/components/AddExpenseButton";
 import CategoryPicker from "@/src/features/transaction/components/CategoryPicker";
 import DescriptionInputCard from "@/src/features/transaction/components/DescriptionInputCard";
+import ModalSelectDate from "@/src/features/transaction/components/ModalSelectDate";
+import ModalSelectPayment, {
+  PAYMENT_METHODS,
+  PaymentMethod,
+} from "@/src/features/transaction/components/ModalSelectPayment";
 import NotesInputCard from "@/src/features/transaction/components/NotesInputCard";
 import TransactionMetaFields from "@/src/features/transaction/components/TransactionMetaFields";
 import AmountInput from "@/src/shared/components/amount-input/AmountInput";
 import Spacer from "@/src/shared/components/spacer/Spacer";
 import { ThemedView } from "@/src/shared/components/themed-view/ThemedView";
 import { useTheme } from "@/src/shared/hooks/useThemeController";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context";
 
+const formatDateLabel = (date: Date) =>
+  new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+
 export default function AddScreen() {
+  const paymentSheetRef = useRef(null);
+  const dateSheetRef = useRef(null);
   const insets = useSafeAreaInsets();
   const theme = useTheme();
   const styles = useMemo(
@@ -31,6 +45,10 @@ export default function AddScreen() {
   const [notes, setNotes] = useState("");
   const [selectedCategoryId, setSelectedCategoryId] =
     useState<TransactionCategoryId>("foodDining");
+  const [selectedDate, setSelectedDate] = useState(() => new Date());
+  const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>(
+    PAYMENT_METHODS[0],
+  );
 
   const handleScanReceipt = () => {
     // TODO: integrate camera / AI OCR
@@ -41,11 +59,11 @@ export default function AddScreen() {
   };
 
   const handleSelectDate = () => {
-    // TODO: open date picker
+    dateSheetRef?.current?.show();
   };
 
   const handleSelectPayment = () => {
-    // TODO: open payment method picker
+    paymentSheetRef?.current?.show();
   };
 
   const handleAddExpense = () => {
@@ -79,8 +97,9 @@ export default function AddScreen() {
         />
         <Spacer height={theme.spacing.xl} />
         <TransactionMetaFields
-          dateLabel="Jan 30, 2025"
-          paymentLabel="Credit Card"
+          dateLabel={formatDateLabel(selectedDate)}
+          paymentIcon={selectedPayment.icon}
+          paymentLabel={selectedPayment.label}
           onPressDate={handleSelectDate}
           onPressPayment={handleSelectPayment}
         />
@@ -90,6 +109,16 @@ export default function AddScreen() {
         <AddExpenseButton onPress={handleAddExpense} />
         <Spacer height={theme.spacing.xl} />
       </KeyboardAwareScrollView>
+      <ModalSelectDate
+        ref={dateSheetRef}
+        selectedDate={selectedDate}
+        onSelect={setSelectedDate}
+      />
+      <ModalSelectPayment
+        ref={paymentSheetRef}
+        selectedPaymentId={selectedPayment.id}
+        onSelect={setSelectedPayment}
+      />
     </ThemedView>
   );
 }

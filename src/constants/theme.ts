@@ -91,6 +91,7 @@ export const Colors = {
     warningCard: BrandColors.warningSoft,
     dangerCard: BrandColors.dangerSoft,
     bottomBarSelectedWrapper: BrandColors.primarySoft,
+    modalBackdrop: "rgba(17, 24, 39, 0.45)",
     white: NeutralColors.white,
   },
   dark: {
@@ -133,6 +134,7 @@ export const Colors = {
     warningCard: "#331F0E",
     dangerCard: "#35151B",
     bottomBarSelectedWrapper: BrandColors.primaryOpacity15,
+    modalBackdrop: "rgba(0, 0, 0, 0.68)",
     white: NeutralColors.white,
   },
 };
