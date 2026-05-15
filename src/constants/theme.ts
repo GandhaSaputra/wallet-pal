@@ -24,6 +24,8 @@ export const BrandColors = {
   shopping: "#F5B400",
   others: "#9CA3AF",
   chartLine: "#6266F1",
+  insight: "#fff9c2",
+  insightIcon: "#d08800",
 } as const;
 
 export const NeutralColors = {
@@ -71,6 +73,7 @@ export const Colors = {
     surface: NeutralColors.white,
     surfacePrimary: BrandColors.primarySurface,
     surfaceMuted: NeutralColors.gray100,
+    muted: NeutralColors.gray150,
     card: NeutralColors.white,
     cardElevated: NeutralColors.white,
     border: NeutralColors.gray200,
@@ -115,6 +118,7 @@ export const Colors = {
     surface: "#12182A",
     surfacePrimary: BrandColors.primaryOpacity15,
     surfaceMuted: "#1A2236",
+    muted: "#1A2236",
     card: "#151D31",
     cardElevated: "#1B2540",
     border: "#273149",
