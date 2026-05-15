@@ -6,7 +6,15 @@ import { createStyles } from "./StatCard.styles";
 import { StatCardProps } from "./StatCard.types";
 
 const StatCard = React.memo(
-  ({ icon, iconBackgroundColor, label, value, valueColor }: StatCardProps) => {
+  ({
+    icon,
+    iconBackgroundColor,
+    label,
+    value,
+    valueColor,
+    subValue,
+    subValueColor,
+  }: StatCardProps) => {
     const theme = useTheme();
     const styles = useMemo(() => createStyles({ theme }), [theme]);
 
@@ -30,6 +38,14 @@ const StatCard = React.memo(
           >
             {value}
           </ThemedText>
+          {subValue && (
+            <ThemedText
+              type="labelSmallRegular"
+              style={subValueColor ? { color: subValueColor } : undefined}
+            >
+              {subValue}
+            </ThemedText>
+          )}
         </View>
       </View>
     );

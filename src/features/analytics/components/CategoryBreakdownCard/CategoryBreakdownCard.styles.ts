@@ -9,32 +9,26 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
       borderWidth: 1,
       borderColor: theme.colors.border,
       padding: theme.spacing.default,
+      gap: theme.spacing.lg,
       ...theme.shadows.sm,
     },
-    footer: {
-      marginTop: theme.spacing.default,
-      gap: theme.spacing.sm,
-    },
-    trendBadge: {
-      flexDirection: "row",
-      alignItems: "center",
+    categoryRow: {
       gap: theme.spacing.xs,
+    },
+    barWrapper: {
+      height: theme.spacing.default,
+      flex: 1,
       backgroundColor: theme.colors.surfaceMuted,
-      paddingHorizontal: theme.spacing.sm,
-      paddingVertical: theme.spacing.xs,
+      borderRadius: theme.radii.pill,
+      overflow: "hidden",
+    },
+    barFill: {
+      height: "100%",
       borderRadius: theme.radii.pill,
     },
-    trendIconWrapper: {
-      width: 28,
-      height: 28,
+    lastMonthBar: {
+      height: "100%",
       borderRadius: theme.radii.pill,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    monthBadge: {
-      backgroundColor: theme.colors.surfaceMuted,
-      paddingHorizontal: theme.spacing.sm,
-      paddingVertical: theme.spacing.xs,
-      borderRadius: theme.radii.sm,
+      backgroundColor: theme.colors.borderStrong,
     },
   });

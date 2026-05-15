@@ -6,4 +6,6 @@ export type StatCardProps = {
   label: string;
   value: string;
   valueColor?: string;
+  subValue?: string;
+  subValueColor?: string;
 };

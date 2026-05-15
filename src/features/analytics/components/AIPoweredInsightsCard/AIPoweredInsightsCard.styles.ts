@@ -47,7 +47,6 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
       padding: theme.spacing.xl,
       gap: theme.spacing.xl,
       ...theme.shadows.sm,
-      shadowColor: theme.colors.shadow,
     },
     header: {
       flexDirection: "row",

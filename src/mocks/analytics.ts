@@ -1,4 +1,5 @@
 import { InsightItem } from "../features/analytics/components/AIPoweredInsightsCard";
+import { CategoryBreakdownItem } from "../features/analytics/components/CategoryBreakdownCard";
 import { SpendingCategoryItem } from "../features/analytics/components/SpendingByCategoryCard";
 
 export const MOCK_SPENDING: SpendingCategoryItem[] = [
@@ -60,5 +61,36 @@ export const YEARLY_INSIGHTS: InsightItem[] = [
     description: "You're 68% towards your yearly target.",
     action: "You can spend $4,220 more this year.",
     tone: "goal",
+  },
+];
+
+export const MOCK_BREAKDOWN: CategoryBreakdownItem[] = [
+  {
+    category: "food",
+    label: "Food",
+    thisMonth: 1800,
+    lastMonth: 1000,
+    thisMonthBudget: 3500,
+  },
+  {
+    category: "transport",
+    label: "Transport",
+    thisMonth: 780,
+    lastMonth: 900,
+    thisMonthBudget: 3500,
+  },
+  {
+    category: "bills",
+    label: "Bills",
+    thisMonth: 550,
+    lastMonth: 510,
+    thisMonthBudget: 3500,
+  },
+  {
+    category: "shopping",
+    label: "Shopping",
+    thisMonth: 350,
+    lastMonth: 250,
+    thisMonthBudget: 3500,
   },
 ];

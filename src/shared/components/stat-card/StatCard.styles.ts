@@ -7,6 +7,8 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
       flex: 1,
       backgroundColor: theme.colors.card,
       borderRadius: theme.radii.md,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
       padding: theme.spacing.default,
       alignItems: "center",
       gap: theme.spacing.sm,

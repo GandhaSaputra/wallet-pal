@@ -4,14 +4,20 @@ import AnalyticsHeader, {
   AnalyticsPeriod,
 } from "@/src/features/analytics/components/AnalyticsHeader";
 import MonthlySpendingTrendCard from "@/src/features/analytics/components/MonthlySpendingTrendCard";
-import { MONTHLY_INSIGHTS, YEARLY_INSIGHTS } from "@/src/mocks/analytics";
+import {
+  MOCK_BREAKDOWN,
+  MONTHLY_INSIGHTS,
+  YEARLY_INSIGHTS,
+} from "@/src/mocks/analytics";
 import Spacer from "@/src/shared/components/spacer/Spacer";
 import { ThemedView } from "@/src/shared/components/themed-view/ThemedView";
 import { useTheme } from "@/src/shared/hooks/useThemeController";
 import { useMemo, useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 
+import CategoryBreakdownCard from "@/src/features/analytics/components/CategoryBreakdownCard";
 import { TrendDataPoint } from "@/src/features/analytics/components/MonthlySpendingTrendCard/MonthlySpendingTrendCard.types";
+import CategoryInsightRow from "@/src/shared/components/category-insight-row";
 
 const MONTH_LABELS = [
   "Jan",
@@ -77,6 +83,13 @@ export default function AnalyticsScreen() {
           data={generateMockTrendData()}
           trendPercentage={8.5}
           currentMonth="January 2025"
+        />
+        <Spacer height={theme.spacing.xl} />
+        <CategoryBreakdownCard items={MOCK_BREAKDOWN} />
+        <Spacer height={theme.spacing.xl} />
+        <CategoryInsightRow
+          bestCategory={{ label: "Transport", percentageSaved: 15 }}
+          needsAttention={{ label: "Food", percentageOver: 25 }}
         />
         <Spacer height={theme.spacing.xl} />
       </ScrollView>
