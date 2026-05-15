@@ -5,7 +5,7 @@ import {
 
 export type CategoryPickerProps = {
   categories: TransactionCategory[];
-  selectedCategoryId: TransactionCategoryId;
+  selectedCategoryId: TransactionCategoryId | null;
   onSelectCategory: (categoryId: TransactionCategoryId) => void;
   required?: boolean;
 };

@@ -1,7 +1,7 @@
 export type TransactionMetaFieldsProps = {
   dateLabel: string;
-  paymentLabel: string;
-  paymentIcon?: string;
+  paymentLabel: string | null;
+  paymentIcon?: string | null;
   onPressDate?: () => void;
   onPressPayment?: () => void;
 };

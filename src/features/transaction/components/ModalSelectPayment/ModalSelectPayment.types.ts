@@ -18,6 +18,6 @@ export type PaymentMethod = {
 };
 
 export type ModalSelectPaymentProps = {
-  selectedPaymentId: PaymentMethodId;
+  selectedPaymentId: PaymentMethodId | null;
   onSelect: (paymentMethod: PaymentMethod) => void;
 };

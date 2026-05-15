@@ -22,6 +22,8 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
     },
     containerIndicatorStyle: {
       backgroundColor: theme.colors.background,
+      borderTopLeftRadius: theme.radii.lg,
+      borderTopRightRadius: theme.radii.lg,
     },
     pickerText: {
       color: theme.colors.text,

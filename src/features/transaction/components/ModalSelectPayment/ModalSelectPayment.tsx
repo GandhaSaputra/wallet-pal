@@ -33,7 +33,7 @@ const ModalSelectPayment = React.memo(
       const styles = useMemo(() => createStyles({ theme }), [theme]);
       const bottomSheetModalRef = useRef<BottomSheetModal>(null);
       const [draftPaymentId, setDraftPaymentId] =
-        useState<PaymentMethodId>(selectedPaymentId);
+        useState<PaymentMethodId | null>(selectedPaymentId);
 
       const selectedPayment = PAYMENT_METHODS.find(
         (method) => method.id === draftPaymentId,
@@ -90,7 +90,7 @@ const ModalSelectPayment = React.memo(
 
             <View style={styles.listContent}>
               {PAYMENT_METHODS.map((method) => {
-                const isSelected = method.id === draftPaymentId;
+                const isSelected = method?.id === draftPaymentId;
 
                 return (
                   <TouchableOpacity

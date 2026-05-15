@@ -9,7 +9,6 @@ import CategoryPicker from "@/src/features/transaction/components/CategoryPicker
 import DescriptionInputCard from "@/src/features/transaction/components/DescriptionInputCard";
 import ModalSelectDate from "@/src/features/transaction/components/ModalSelectDate";
 import ModalSelectPayment, {
-  PAYMENT_METHODS,
   PaymentMethod,
 } from "@/src/features/transaction/components/ModalSelectPayment";
 import NotesInputCard from "@/src/features/transaction/components/NotesInputCard";
@@ -44,11 +43,13 @@ export default function AddScreen() {
   const [description, setDescription] = useState("");
   const [notes, setNotes] = useState("");
   const [selectedCategoryId, setSelectedCategoryId] =
-    useState<TransactionCategoryId>("foodDining");
+    useState<TransactionCategoryId | null>(null);
   const [selectedDate, setSelectedDate] = useState(() => new Date());
-  const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>(
-    PAYMENT_METHODS[0],
+  const [selectedPayment, setSelectedPayment] = useState<PaymentMethod | null>(
+    null,
   );
+
+  const isAddExpenseDisabled = !amount.trim() || !selectedCategoryId;
 
   const handleScanReceipt = () => {
     // TODO: integrate camera / AI OCR
@@ -86,7 +87,7 @@ export default function AddScreen() {
           onChangeText={setDescription}
           suggestion="This looks like a Food & Dining expense"
           onApplySuggestion={handleApplySuggestion}
-          required
+          required={false}
         />
         <Spacer height={theme.spacing.xl} />
         <CategoryPicker
@@ -98,15 +99,18 @@ export default function AddScreen() {
         <Spacer height={theme.spacing.xl} />
         <TransactionMetaFields
           dateLabel={formatDateLabel(selectedDate)}
-          paymentIcon={selectedPayment.icon}
-          paymentLabel={selectedPayment.label}
+          paymentIcon={selectedPayment?.icon ?? null}
+          paymentLabel={selectedPayment?.label ?? null}
           onPressDate={handleSelectDate}
           onPressPayment={handleSelectPayment}
         />
         <Spacer height={theme.spacing.xl} />
         <NotesInputCard value={notes} onChangeText={setNotes} />
         <Spacer height={theme.spacing.xl} />
-        <AddExpenseButton onPress={handleAddExpense} />
+        <AddExpenseButton
+          onPress={handleAddExpense}
+          disabled={isAddExpenseDisabled}
+        />
         <Spacer height={Platform?.OS === "android" ? 80 : theme.spacing.xl} />
       </KeyboardAwareScrollView>
       <ModalSelectDate
@@ -116,7 +120,7 @@ export default function AddScreen() {
       />
       <ModalSelectPayment
         ref={paymentSheetRef}
-        selectedPaymentId={selectedPayment.id}
+        selectedPaymentId={selectedPayment?.id ?? null}
         onSelect={setSelectedPayment}
       />
     </ThemedView>

@@ -32,7 +32,6 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
     },
     valueText: {
       flexShrink: 1,
-      color: theme.colors.text,
     },
     paymentIcon: {
       ...theme.fonts.bodyMedium,

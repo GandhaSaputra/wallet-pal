@@ -9,7 +9,7 @@ const TransactionMetaFields = React.memo(
   ({
     dateLabel,
     paymentLabel,
-    paymentIcon = "💳",
+    paymentIcon,
     onPressDate,
     onPressPayment,
   }: TransactionMetaFieldsProps) => {
@@ -42,9 +42,15 @@ const TransactionMetaFields = React.memo(
             onPress={onPressPayment}
             style={styles.valueBox}
           >
-            <Text style={styles.paymentIcon}>{paymentIcon}</Text>
-            <ThemedText type="labelMediumMedium" style={styles.valueText}>
-              {paymentLabel}
+            {paymentIcon && (
+              <Text style={styles.paymentIcon}>{paymentIcon}</Text>
+            )}
+            <ThemedText
+              type="labelMediumMedium"
+              style={styles.valueText}
+              colorVariant={paymentLabel ? "text" : "textMuted"}
+            >
+              {paymentLabel ?? "Select Payment"}
             </ThemedText>
           </TouchableOpacity>
         </View>

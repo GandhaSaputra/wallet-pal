@@ -11,6 +11,9 @@ import { ScanReceiptCardProps } from "./ScanReceiptCard.types";
 const ScanReceiptCard = React.memo(({ onScan }: ScanReceiptCardProps) => {
   const { theme, colorScheme } = useThemeController();
   const styles = useMemo(() => createStyles({ theme }), [theme]);
+  const buttonContentColor = theme.isDark
+    ? theme.colors.white
+    : theme.colors.primary;
 
   return (
     <View style={styles.container}>
@@ -43,7 +46,7 @@ const ScanReceiptCard = React.memo(({ onScan }: ScanReceiptCardProps) => {
         <Feather
           name="camera"
           size={theme.iconSizes.sm}
-          color={theme.colors.primary}
+          color={buttonContentColor}
         />
         <ThemedText type="bodySmallSemibold" style={styles.buttonText}>
           Scan Receipt
@@ -85,13 +88,17 @@ const createStyles = ({ theme }: { theme: ReturnType<typeof useTheme> }) =>
       gap: theme.spacing.sm,
       marginTop: theme.spacing.sm,
       borderWidth: 1.5,
-      borderColor: theme.colors.primary,
+      borderColor: theme.isDark
+        ? theme.colors.primaryBorder
+        : theme.colors.primary,
       borderRadius: theme.radii.md,
       paddingVertical: theme.spacing.sm,
-      backgroundColor: theme.colors.surface,
+      backgroundColor: theme.isDark
+        ? theme.colors.primary
+        : theme.colors.surface,
       width: "100%",
     },
     buttonText: {
-      color: theme.colors.primary,
+      color: theme.isDark ? theme.colors.white : theme.colors.primary,
     },
   });
