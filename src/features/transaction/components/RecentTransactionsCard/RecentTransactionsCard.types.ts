@@ -6,6 +6,7 @@ export type TransactionItem = {
   merchantName: string;
   category: SpendingCategory;
   categoryLabel: string;
+  paymentMethod: string;
   date: string;
   amount: number;
 };
