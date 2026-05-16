@@ -1,4 +1,9 @@
 import AISearchCard from "@/src/features/search/components/AISearchCard";
+import ModalFilter, {
+  DEFAULT_FILTERS,
+  ModalFilterRef,
+  SearchFilters,
+} from "@/src/features/search/components/ModalFilter";
 import ModalSort, {
   ModalSortRef,
 } from "@/src/features/search/components/ModalSort";
@@ -27,6 +32,7 @@ export default function SearchScreen() {
   const styles = createStyles(theme);
 
   const modalSortRef = useRef<ModalSortRef>(null);
+  const modalFilterRef = useRef<ModalFilterRef>(null);
 
   const [query, setQuery] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -35,6 +41,8 @@ export default function SearchScreen() {
     "food",
   ]);
   const [sortId, setSortId] = useState("date_desc");
+  const [activeFilters, setActiveFilters] =
+    useState<SearchFilters>(DEFAULT_FILTERS);
 
   const handleSubmit = (text: string) => {
     if (!text.trim()) return;
@@ -49,8 +57,85 @@ export default function SearchScreen() {
     );
   };
 
+  const filteredResults = useMemo(() => {
+    let results = [...MOCK_SEARCH_RESULTS];
+
+    // Filter by query
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      results = results.filter(
+        (t) =>
+          t.merchantName.toLowerCase().includes(q) ||
+          t.categoryLabel.toLowerCase().includes(q),
+      );
+    }
+
+    // Filter by category
+    if (activeFilters.categories.length > 0) {
+      results = results.filter((t) =>
+        activeFilters.categories.includes(t.category),
+      );
+    }
+
+    // Filter by date range
+    if (activeFilters.dateRange !== "all") {
+      const now = new Date();
+      results = results.filter((t) => {
+        const txDate = new Date(t.date);
+        switch (activeFilters.dateRange) {
+          case "this_week": {
+            const weekAgo = new Date(now);
+            weekAgo.setDate(now.getDate() - 7);
+            return txDate >= weekAgo;
+          }
+          case "this_month":
+            return (
+              txDate.getMonth() === now.getMonth() &&
+              txDate.getFullYear() === now.getFullYear()
+            );
+          case "last_month": {
+            const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1);
+            return (
+              txDate.getMonth() === lastMonth.getMonth() &&
+              txDate.getFullYear() === lastMonth.getFullYear()
+            );
+          }
+          default:
+            return true;
+        }
+      });
+    }
+
+    // Filter by amount range
+    if (activeFilters.minAmount) {
+      const min = parseFloat(activeFilters.minAmount);
+      results = results.filter((t) => Math.abs(t.amount) >= min);
+    }
+    if (activeFilters.maxAmount) {
+      const max = parseFloat(activeFilters.maxAmount);
+      results = results.filter((t) => Math.abs(t.amount) <= max);
+    }
+
+    // Filter by payment method
+    if (activeFilters.paymentMethods.length > 0) {
+      const methodMap: Record<string, string> = {
+        credit_card: "Credit Card",
+        cash: "Cash",
+        digital_wallet: "Digital Wallet",
+      };
+      results = results.filter((t) =>
+        activeFilters.paymentMethods.some(
+          (m) => methodMap[m] === t.paymentMethod,
+        ),
+      );
+    }
+
+    return results;
+  }, [query, activeFilters]);
+
+  // Sort after filter
   const sortedResults = useMemo(() => {
-    return [...MOCK_SEARCH_RESULTS].sort((a, b) => {
+    return [...filteredResults].sort((a, b) => {
       switch (sortId) {
         case "date_desc":
           return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -64,12 +149,20 @@ export default function SearchScreen() {
           return 0;
       }
     });
-  }, [sortId]);
+  }, [filteredResults, sortId]);
 
   const totalAmount = useMemo(
     () => sortedResults.reduce((sum, t) => sum + t.amount, 0),
     [sortedResults],
   );
+
+  const isFiltered =
+    selectedFilters.length > 0 ||
+    activeFilters.categories.length > 0 ||
+    activeFilters.dateRange !== "all" ||
+    !!activeFilters.minAmount ||
+    !!activeFilters.maxAmount ||
+    activeFilters.paymentMethods.length > 0;
 
   return (
     <>
@@ -78,7 +171,9 @@ export default function SearchScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
-          <SearchFilterHeader />
+          <SearchFilterHeader
+            onFilterPress={() => modalFilterRef.current?.show()}
+          />
 
           <Spacer height={theme.spacing.default} />
 
@@ -102,7 +197,7 @@ export default function SearchScreen() {
           <SearchResultList
             results={sortedResults}
             totalCount={sortedResults.length}
-            isFiltered={selectedFilters.length > 0}
+            isFiltered={isFiltered}
             onSortPress={() => modalSortRef.current?.show()}
           />
 
@@ -120,6 +215,11 @@ export default function SearchScreen() {
       </ThemedView>
 
       <ModalSort ref={modalSortRef} selectedId={sortId} onSelect={setSortId} />
+      <ModalFilter
+        ref={modalFilterRef}
+        filters={activeFilters}
+        onApply={setActiveFilters}
+      />
     </>
   );
 }

@@ -5,13 +5,21 @@ import { Feather } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
-const SearchFilterHeader = () => {
+const SearchFilterHeader = ({
+  onFilterPress,
+}: {
+  onFilterPress: () => void;
+}) => {
   const theme = useTheme();
   const styles = createStyles({ theme });
   return (
     <View style={[theme.flex.rowCenterBetween, styles.header]}>
       <ThemedText type="titleMedium">Search & Filter</ThemedText>
-      <Pressable style={styles.filterButton} hitSlop={8}>
+      <Pressable
+        onPress={onFilterPress}
+        style={styles.filterButton}
+        hitSlop={8}
+      >
         <Feather name="filter" size={20} color={theme.colors.icon} />
       </Pressable>
     </View>
