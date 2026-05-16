@@ -21,6 +21,7 @@ const SearchTotalCard = React.memo(
     const formattedAmount = `${isExpense ? "-" : "+"}${formatCurrency({
       amount: Math.abs(totalAmount),
       currency: currencyCode,
+      showDecimals: true,
     })}`;
 
     return (

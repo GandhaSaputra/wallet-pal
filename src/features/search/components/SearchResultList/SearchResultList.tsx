@@ -17,25 +17,22 @@ type ResultItemProps = {
 };
 
 const ResultItem = React.memo(
-  ({ item, styles, theme, currencyCode }: ResultItemProps) => {
+  ({ item, styles, currencyCode }: ResultItemProps) => {
     const isExpense = item.amount < 0;
     const formattedAmount = `${isExpense ? "-" : "+"}${formatCurrency({
       amount: Math.abs(item.amount),
       currency: currencyCode,
+      showDecimals: true,
     })}`;
 
     return (
       <View style={styles.transactionItem}>
-        {/* Icon */}
         <View style={styles.iconContainer}>
           <ThemedText type="titleSmall">{item.icon}</ThemedText>
         </View>
-
-        {/* Merchant info */}
         <View style={styles.merchantInfo}>
           <ThemedText type="bodySmallSemibold">{item.merchantName}</ThemedText>
           <View style={styles.metaRow}>
-            {/* Category badge */}
             <View style={styles.categoryBadge}>
               <ThemedText type="labelSmallRegular" colorVariant="textSecondary">
                 {item.categoryLabel}
@@ -51,8 +48,6 @@ const ResultItem = React.memo(
             </ThemedText>
           </View>
         </View>
-
-        {/* Amount */}
         <ThemedText
           type="bodySmallSemibold"
           colorVariant={isExpense ? "text" : "success"}
@@ -79,7 +74,6 @@ const SearchResultList = React.memo(
 
     return (
       <View>
-        {/* Result header */}
         <View style={[theme.flex.rowCenterBetween, styles.resultHeader]}>
           <View style={[theme.flex.rowCenterCenter, { gap: theme.spacing.sm }]}>
             <ThemedText type="bodyMediumSemibold">
@@ -96,8 +90,6 @@ const SearchResultList = React.memo(
               </View>
             )}
           </View>
-
-          {/* Sort button */}
           <Pressable
             style={({ pressed }) => [
               styles.sortButton,
@@ -109,8 +101,6 @@ const SearchResultList = React.memo(
             <Feather name="bar-chart-2" size={18} color={theme.colors.icon} />
           </Pressable>
         </View>
-
-        {/* Result items */}
         <View style={styles.resultsList}>
           {results.map((item) => (
             <ResultItem

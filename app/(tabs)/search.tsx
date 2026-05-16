@@ -12,7 +12,7 @@ import { MOCK_SEARCH_RESULTS } from "@/src/mocks/search";
 import Spacer from "@/src/shared/components/spacer/Spacer";
 import { ThemedView } from "@/src/shared/components/themed-view/ThemedView";
 import { useTheme } from "@/src/shared/hooks/useThemeController";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 
 const QUICK_FILTERS: QuickFilterItem[] = [
@@ -21,8 +21,6 @@ const QUICK_FILTERS: QuickFilterItem[] = [
   { id: "food", label: "Food" },
   { id: "over_20", label: "Over $20" },
 ];
-
-const TOTAL_AMOUNT = MOCK_SEARCH_RESULTS.reduce((sum, t) => sum + t.amount, 0);
 
 export default function SearchScreen() {
   const theme = useTheme();
@@ -50,6 +48,28 @@ export default function SearchScreen() {
       prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id],
     );
   };
+
+  const sortedResults = useMemo(() => {
+    return [...MOCK_SEARCH_RESULTS].sort((a, b) => {
+      switch (sortId) {
+        case "date_desc":
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+        case "date_asc":
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        case "amount_desc":
+          return Math.abs(b.amount) - Math.abs(a.amount);
+        case "amount_asc":
+          return Math.abs(a.amount) - Math.abs(b.amount);
+        default:
+          return 0;
+      }
+    });
+  }, [sortId]);
+
+  const totalAmount = useMemo(
+    () => sortedResults.reduce((sum, t) => sum + t.amount, 0),
+    [sortedResults],
+  );
 
   return (
     <>
@@ -80,8 +100,8 @@ export default function SearchScreen() {
           <Spacer height={theme.spacing.xl} />
 
           <SearchResultList
-            results={MOCK_SEARCH_RESULTS}
-            totalCount={MOCK_SEARCH_RESULTS.length}
+            results={sortedResults}
+            totalCount={sortedResults.length}
             isFiltered={selectedFilters.length > 0}
             onSortPress={() => modalSortRef.current?.show()}
           />
@@ -90,8 +110,8 @@ export default function SearchScreen() {
 
           <SearchTotalCard
             label="Total Coffee Expenses"
-            totalAmount={TOTAL_AMOUNT}
-            transactionCount={MOCK_SEARCH_RESULTS.length}
+            totalAmount={totalAmount}
+            transactionCount={sortedResults.length}
             period="this month"
           />
 

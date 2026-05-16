@@ -9,6 +9,5 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
       padding: theme.spacing.default,
       borderColor: theme.colors.border,
       borderWidth: 1,
-      // ...theme.shadows.sm,
     },
   });
