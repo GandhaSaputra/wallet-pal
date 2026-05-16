@@ -12,6 +12,8 @@ export const BrandColors = {
   secondary: "#165dfc",
   accentPurple: "#A020F0",
   aiBlue: "#0B57FF",
+  aiSurface: "#eef6ff",
+  aiBorderColor: "#c6dfff",
   success: "#00a63d",
   successSoft: "#EAFBF1",
   warning: "#FF4B00",
@@ -61,6 +63,8 @@ export const Colors = {
     secondary: BrandColors.secondary,
     accent: BrandColors.accentPurple,
     ai: BrandColors.aiBlue,
+    aiSurface: BrandColors.aiSurface,
+    aiBorderColor: BrandColors.aiBorderColor,
     success: BrandColors.success,
     warning: BrandColors.warning,
     danger: BrandColors.danger,
@@ -106,6 +110,8 @@ export const Colors = {
     secondary: BrandColors.secondary,
     accent: "#C084FC",
     ai: "#7DB1FF",
+    aiSurface: BrandColors.aiSurface,
+    aiBorderColor: BrandColors.aiBorderColor,
     success: BrandColors.success,
     warning: "#FF8A3D",
     danger: "#FF5A67",
@@ -213,6 +219,7 @@ export const spacing = {
 };
 
 export const iconSizes = {
+  xs: 12,
   sm: 16,
   md: 20,
   default: 24,

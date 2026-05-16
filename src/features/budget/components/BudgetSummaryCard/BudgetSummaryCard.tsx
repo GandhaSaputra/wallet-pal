@@ -7,7 +7,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { getLocales } from "expo-localization";
 import React, { useMemo } from "react";
 import { View } from "react-native";
-import Reanimated, { SlideInLeft } from "react-native-reanimated";
+import Reanimated, { Easing, SlideInLeft } from "react-native-reanimated";
 import { BudgetSummaryCardProps } from ".";
 import { createStyles } from "./BudgetSumamryCard.styles";
 
@@ -76,7 +76,7 @@ const BudgetSummaryCard = React.memo(
           <View style={styles.progressTrack}>
             <Reanimated.View
               style={[styles.progressFill, { width: `${clampedPercentage}%` }]}
-              entering={SlideInLeft.duration(1500)}
+              entering={SlideInLeft.duration(1200).easing(Easing.ease)}
             />
           </View>
           <Spacer height={theme.spacing.md} />
