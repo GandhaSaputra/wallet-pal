@@ -109,7 +109,7 @@ export const Colors = {
     primarySoft: "#211D45",
     secondary: BrandColors.secondary,
     accent: "#C084FC",
-    ai: "#7DB1FF",
+    ai: BrandColors.aiBlue,
     aiSurface: BrandColors.aiSurface,
     aiBorderColor: BrandColors.aiBorderColor,
     success: BrandColors.success,

@@ -8,7 +8,9 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
       borderRadius: theme.radii.md,
       padding: theme.spacing.default,
       gap: theme.spacing.default,
-      ...theme.shadows.card,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      ...theme.shadows.sm,
     },
     sectionHeader: {
       flexDirection: "row",

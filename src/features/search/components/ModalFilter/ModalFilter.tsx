@@ -12,7 +12,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Pressable, TextInput, View } from "react-native";
+import { TextInput, TouchableOpacity, View } from "react-native";
 import { createStyles } from "./ModalFilter.styles";
 import {
   CATEGORY_OPTIONS,
@@ -43,12 +43,9 @@ type FilterChipProps = {
 
 const FilterChip = React.memo(
   ({ label, isSelected, onPress, styles }: FilterChipProps) => (
-    <Pressable
-      style={({ pressed }) => [
-        styles.chip,
-        isSelected && styles.chipSelected,
-        pressed && { opacity: 0.7 },
-      ]}
+    <TouchableOpacity
+      activeOpacity={0.8}
+      style={[styles.chip, isSelected && styles.chipSelected]}
       onPress={onPress}
     >
       <ThemedText
@@ -62,7 +59,7 @@ const FilterChip = React.memo(
       >
         {label}
       </ThemedText>
-    </Pressable>
+    </TouchableOpacity>
   ),
 );
 
@@ -152,13 +149,16 @@ const ModalFilter = React.memo(
           handleIndicatorStyle={styles.indicatorStyle}
           handleStyle={styles.containerIndicatorStyle}
         >
-          {/* Header */}
           <View style={styles.header}>
-            <Pressable onPress={handleReset} hitSlop={8}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={handleReset}
+              hitSlop={8}
+            >
               <ThemedText type="bodyMediumSemibold" style={styles.resetText}>
                 Reset
               </ThemedText>
-            </Pressable>
+            </TouchableOpacity>
             <ThemedText type="titleSmall">Filter</ThemedText>
             <ThemedText type="bodyMedium" colorVariant="textMuted">
               {activeFilterCount > 0 ? `${activeFilterCount} active` : ""}
@@ -169,7 +169,6 @@ const ModalFilter = React.memo(
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
           >
-            {/* Category */}
             <View style={styles.section}>
               <SectionTitle title="Category" />
               <View style={styles.chipsRow}>
@@ -187,7 +186,6 @@ const ModalFilter = React.memo(
 
             <View style={styles.divider} />
 
-            {/* Date Range */}
             <View style={styles.section}>
               <SectionTitle title="Date Range" />
               <View style={styles.chipsRow}>
@@ -210,11 +208,9 @@ const ModalFilter = React.memo(
 
             <View style={styles.divider} />
 
-            {/* Amount Range */}
             <View style={styles.section}>
               <SectionTitle title="Amount Range" />
               <View style={styles.amountRow}>
-                {/* Min */}
                 <View style={styles.amountInputWrapper}>
                   <ThemedText type="labelSmallRegular" colorVariant="textMuted">
                     Min
@@ -236,7 +232,6 @@ const ModalFilter = React.memo(
 
                 <View style={styles.amountSeparator} />
 
-                {/* Max */}
                 <View style={styles.amountInputWrapper}>
                   <ThemedText type="labelSmallRegular" colorVariant="textMuted">
                     Max
@@ -260,7 +255,6 @@ const ModalFilter = React.memo(
 
             <View style={styles.divider} />
 
-            {/* Payment Method */}
             <View style={styles.section}>
               <SectionTitle title="Payment Method" />
               <View style={styles.chipsRow}>
@@ -279,12 +273,9 @@ const ModalFilter = React.memo(
             </View>
           </BottomSheetScrollView>
 
-          {/* Apply button — outside ScrollView agar always visible */}
-          <Pressable
-            style={({ pressed }) => [
-              styles.applyButton,
-              pressed && { opacity: 0.85 },
-            ]}
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[styles.applyButton]}
             onPress={handleApply}
           >
             <ThemedText
@@ -295,7 +286,7 @@ const ModalFilter = React.memo(
                 ? `Apply Filters (${activeFilterCount})`
                 : "Apply"}
             </ThemedText>
-          </Pressable>
+          </TouchableOpacity>
         </BottomSheetModal>
       );
     },

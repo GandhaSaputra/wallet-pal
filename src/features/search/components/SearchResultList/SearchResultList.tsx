@@ -5,7 +5,7 @@ import { useTheme } from "@/src/shared/hooks/useThemeController";
 import { formatCurrency } from "@/src/shared/utils/formatCurrency";
 import { Feather } from "@expo/vector-icons";
 import React, { useMemo } from "react";
-import { Pressable, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { createStyles } from "./SearchResultList.styles";
 import { SearchResultListProps } from "./SearchResultList.types";
 
@@ -90,16 +90,14 @@ const SearchResultList = React.memo(
               </View>
             )}
           </View>
-          <Pressable
-            style={({ pressed }) => [
-              styles.sortButton,
-              pressed && { opacity: 0.7 },
-            ]}
+          <TouchableOpacity
+            style={[styles.sortButton]}
             onPress={onSortPress}
             hitSlop={8}
+            activeOpacity={0.7}
           >
             <Feather name="bar-chart-2" size={18} color={theme.colors.icon} />
-          </Pressable>
+          </TouchableOpacity>
         </View>
         <View style={styles.resultsList}>
           {results.map((item) => (

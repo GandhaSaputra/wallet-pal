@@ -8,6 +8,8 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
       borderRadius: theme.radii.md,
       padding: theme.spacing.default,
       gap: theme.spacing.md,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
       ...theme.shadows.sm,
     },
     chipsWrapper: {

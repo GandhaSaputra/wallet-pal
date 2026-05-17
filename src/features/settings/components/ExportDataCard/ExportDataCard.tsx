@@ -2,7 +2,7 @@ import { ThemedText } from "@/src/shared/components/themed-text/ThemedText";
 import { useTheme } from "@/src/shared/hooks/useThemeController";
 import { Feather } from "@expo/vector-icons";
 import React, { useMemo } from "react";
-import { ActivityIndicator, Pressable, View } from "react-native";
+import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 import { createStyles } from "./ExportDataCard.styles";
 import { ExportDataCardProps, ExportFormat } from "./ExportDataCard.types";
 
@@ -24,14 +24,11 @@ const ExportButton = React.memo(
     styles,
     theme,
   }: ExportButtonProps) => (
-    <Pressable
-      style={({ pressed }) => [
-        styles.exportButton,
-        pressed && styles.exportButtonPressed,
-        isExporting && styles.exportButtonDisabled,
-      ]}
+    <TouchableOpacity
+      style={[styles.exportButton, isExporting && styles.exportButtonDisabled]}
       onPress={() => onPress(format)}
       disabled={isExporting}
+      activeOpacity={0.7}
     >
       {isExporting ? (
         <ActivityIndicator size="small" color={theme.colors.primary} />
@@ -39,7 +36,7 @@ const ExportButton = React.memo(
         <Feather name="file-text" size={28} color={theme.colors.icon} />
       )}
       <ThemedText type="bodySmallSemibold">{label}</ThemedText>
-    </Pressable>
+    </TouchableOpacity>
   ),
 );
 

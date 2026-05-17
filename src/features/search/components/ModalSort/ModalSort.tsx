@@ -11,7 +11,7 @@ import React, {
   useMemo,
   useRef,
 } from "react";
-import { Pressable, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { createStyles } from "./ModalSort.styles";
 import { ModalSortProps, ModalSortRef, SORT_OPTIONS } from "./ModalSort.types";
 
@@ -66,16 +66,15 @@ const ModalSort = React.memo(
               <ThemedText type="titleSmall">Sort By</ThemedText>
             </View>
 
-            {/* Options */}
             {SORT_OPTIONS.map((option) => {
               const isSelected = option.id === selectedId;
               return (
-                <Pressable
+                <TouchableOpacity
+                  activeOpacity={0.7}
                   key={option.id}
-                  style={({ pressed }) => [
+                  style={[
                     styles.optionRow,
                     isSelected && styles.optionRowSelected,
-                    pressed && { opacity: 0.7 },
                   ]}
                   onPress={() => handleSelect(option.id)}
                 >
@@ -86,7 +85,6 @@ const ModalSort = React.memo(
                     {option.label}
                   </ThemedText>
 
-                  {/* Radio button */}
                   <View
                     style={[
                       styles.radioOuter,
@@ -95,7 +93,7 @@ const ModalSort = React.memo(
                   >
                     {isSelected && <View style={styles.radioInner} />}
                   </View>
-                </Pressable>
+                </TouchableOpacity>
               );
             })}
           </BottomSheetView>
