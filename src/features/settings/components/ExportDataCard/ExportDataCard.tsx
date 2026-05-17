@@ -52,13 +52,11 @@ const ExportDataCard = React.memo(
 
     return (
       <View style={styles.container}>
-        {/* Section header */}
         <View style={styles.sectionHeader}>
           <Feather name="download" size={20} color={theme.colors.icon} />
           <ThemedText type="bodyMediumSemibold">Export Data</ThemedText>
         </View>
 
-        {/* Export buttons */}
         <View style={styles.exportButtons}>
           <ExportButton
             label="Export CSV"
@@ -78,7 +76,6 @@ const ExportDataCard = React.memo(
           />
         </View>
 
-        {/* Description */}
         <ThemedText type="bodySmall" colorVariant="textMuted">
           Export your expense data for backup or analysis in other tools.
         </ThemedText>
