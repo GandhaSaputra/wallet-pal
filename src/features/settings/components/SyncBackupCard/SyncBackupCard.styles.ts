@@ -21,9 +21,11 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
       flexDirection: "row",
       alignItems: "center",
       gap: theme.spacing.md,
-      backgroundColor: theme.colors.surfaceMuted,
+      backgroundColor: theme.colors.surface,
       borderRadius: theme.radii.md,
       padding: theme.spacing.md,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
     },
     serviceIconWrapper: {
       width: 44,

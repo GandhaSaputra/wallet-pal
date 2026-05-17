@@ -6,6 +6,7 @@ import ExportDataCard from "@/src/features/settings/components/ExportDataCard";
 import { ExportFormat } from "@/src/features/settings/components/ExportDataCard/ExportDataCard.types";
 import ProfileCard from "@/src/features/settings/components/ProfileCard";
 import SyncBackupCard from "@/src/features/settings/components/SyncBackupCard";
+import { MOCK_CATEGORIES } from "@/src/mocks/settings";
 import Spacer from "@/src/shared/components/spacer/Spacer";
 import { ThemedText } from "@/src/shared/components/themed-text/ThemedText";
 import { ThemedView } from "@/src/shared/components/themed-view/ThemedView";
@@ -18,30 +19,6 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-
-const MOCK_CATEGORIES: CustomCategory[] = [
-  {
-    id: "1",
-    icon: "☕",
-    name: "Coffee & Drinks",
-    color: "#FF6B35",
-    transactionCount: 15,
-  },
-  {
-    id: "2",
-    icon: "💪",
-    name: "Gym & Fitness",
-    color: "#4CAF50",
-    transactionCount: 8,
-  },
-  {
-    id: "3",
-    icon: "🐕",
-    name: "Pet Expenses",
-    color: "#2196F3",
-    transactionCount: 12,
-  },
-];
 
 export default function SettingsScreen() {
   const { theme, toggleTheme, colorScheme } = useThemeController();
