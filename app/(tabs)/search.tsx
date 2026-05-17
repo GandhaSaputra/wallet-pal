@@ -27,6 +27,49 @@ const QUICK_FILTERS: QuickFilterItem[] = [
   { id: "over_20", label: "Over $20" },
 ];
 
+const getReferenceDate = (dates: string[]) =>
+  dates.reduce((latest, date) => {
+    const current = new Date(date);
+    return current > latest ? current : latest;
+  }, new Date(dates[0]));
+
+const isInDateRange = (
+  date: string,
+  range: SearchFilters["dateRange"],
+  referenceDate: Date,
+) => {
+  if (range === "all") {
+    return true;
+  }
+
+  const txDate = new Date(date);
+
+  switch (range) {
+    case "this_week": {
+      const weekAgo = new Date(referenceDate);
+      weekAgo.setDate(referenceDate.getDate() - 7);
+      return txDate >= weekAgo && txDate <= referenceDate;
+    }
+    case "this_month":
+      return (
+        txDate.getMonth() === referenceDate.getMonth() &&
+        txDate.getFullYear() === referenceDate.getFullYear()
+      );
+    case "last_month": {
+      const lastMonth = new Date(
+        referenceDate.getFullYear(),
+        referenceDate.getMonth() - 1,
+      );
+      return (
+        txDate.getMonth() === lastMonth.getMonth() &&
+        txDate.getFullYear() === lastMonth.getFullYear()
+      );
+    }
+    default:
+      return true;
+  }
+};
+
 export default function SearchScreen() {
   const theme = useTheme();
   const styles = createStyles(theme);
@@ -43,6 +86,10 @@ export default function SearchScreen() {
   const [sortId, setSortId] = useState("date_desc");
   const [activeFilters, setActiveFilters] =
     useState<SearchFilters>(DEFAULT_FILTERS);
+  const referenceDate = useMemo(
+    () => getReferenceDate(MOCK_SEARCH_RESULTS.map((result) => result.date)),
+    [],
+  );
 
   const handleSubmit = (text: string) => {
     if (!text.trim()) return;
@@ -70,6 +117,28 @@ export default function SearchScreen() {
       );
     }
 
+    // Filter by quick date filters
+    if (selectedFilters.includes("this_week")) {
+      results = results.filter((t) =>
+        isInDateRange(t.date, "this_week", referenceDate),
+      );
+    }
+    if (selectedFilters.includes("this_month")) {
+      results = results.filter((t) =>
+        isInDateRange(t.date, "this_month", referenceDate),
+      );
+    }
+
+    // Filter by quick category filters
+    if (selectedFilters.includes("food")) {
+      results = results.filter((t) => t.category === "food");
+    }
+
+    // Filter by quick amount filters
+    if (selectedFilters.includes("over_20")) {
+      results = results.filter((t) => Math.abs(t.amount) > 20);
+    }
+
     // Filter by category
     if (activeFilters.categories.length > 0) {
       results = results.filter((t) =>
@@ -79,31 +148,9 @@ export default function SearchScreen() {
 
     // Filter by date range
     if (activeFilters.dateRange !== "all") {
-      const now = new Date();
-      results = results.filter((t) => {
-        const txDate = new Date(t.date);
-        switch (activeFilters.dateRange) {
-          case "this_week": {
-            const weekAgo = new Date(now);
-            weekAgo.setDate(now.getDate() - 7);
-            return txDate >= weekAgo;
-          }
-          case "this_month":
-            return (
-              txDate.getMonth() === now.getMonth() &&
-              txDate.getFullYear() === now.getFullYear()
-            );
-          case "last_month": {
-            const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1);
-            return (
-              txDate.getMonth() === lastMonth.getMonth() &&
-              txDate.getFullYear() === lastMonth.getFullYear()
-            );
-          }
-          default:
-            return true;
-        }
-      });
+      results = results.filter((t) =>
+        isInDateRange(t.date, activeFilters.dateRange, referenceDate),
+      );
     }
 
     // Filter by amount range
@@ -131,7 +178,7 @@ export default function SearchScreen() {
     }
 
     return results;
-  }, [query, activeFilters]);
+  }, [query, selectedFilters, activeFilters, referenceDate]);
 
   // Sort after filter
   const sortedResults = useMemo(() => {
