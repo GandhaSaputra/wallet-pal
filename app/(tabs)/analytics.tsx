@@ -76,22 +76,22 @@ export default function AnalyticsScreen() {
           selectedPeriod={selectedPeriod}
           onSelectPeriod={setSelectedPeriod}
         />
-        <Spacer height={theme.spacing.xl} />
+        <Spacer height={theme.spacing.lg} />
         <AIPoweredInsightsCard insights={insights} />
-        <Spacer height={theme.spacing.xl} />
+        <Spacer height={theme.spacing.lg} />
         <MonthlySpendingTrendCard
           data={generateMockTrendData()}
           trendPercentage={8.5}
           currentMonth="January 2025"
         />
-        <Spacer height={theme.spacing.xl} />
+        <Spacer height={theme.spacing.lg} />
         <CategoryBreakdownCard items={MOCK_BREAKDOWN} />
-        <Spacer height={theme.spacing.xl} />
+        <Spacer height={theme.spacing.lg} />
         <CategoryInsightRow
           bestCategory={{ label: "Transport", percentageSaved: 15 }}
           needsAttention={{ label: "Food", percentageOver: 25 }}
         />
-        <Spacer height={theme.spacing.xl} />
+        <Spacer height={theme.spacing.lg} />
       </ScrollView>
     </ThemedView>
   );

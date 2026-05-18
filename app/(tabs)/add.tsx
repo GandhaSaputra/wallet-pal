@@ -15,10 +15,11 @@ import NotesInputCard from "@/src/features/transaction/components/NotesInputCard
 import TransactionMetaFields from "@/src/features/transaction/components/TransactionMetaFields";
 import AmountInput from "@/src/shared/components/amount-input/AmountInput";
 import Spacer from "@/src/shared/components/spacer/Spacer";
+import { ThemedText } from "@/src/shared/components/themed-text/ThemedText";
 import { ThemedView } from "@/src/shared/components/themed-view/ThemedView";
 import { useTheme } from "@/src/shared/hooks/useThemeController";
 import { useMemo, useRef, useState } from "react";
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -78,10 +79,14 @@ export default function AddScreen() {
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
+        <View style={styles.header}>
+          <ThemedText type="titleMedium">Add Transaction</ThemedText>
+        </View>
+        <Spacer height={theme.spacing.lg} />
         <ScanReceiptCard onScan={handleScanReceipt} />
-        <Spacer height={theme.spacing.xl} />
+        <Spacer height={theme.spacing.lg} />
         <AmountInput value={amount} onChangeText={setAmount} required />
-        <Spacer height={theme.spacing.xl} />
+        <Spacer height={theme.spacing.lg} />
         <DescriptionInputCard
           value={description}
           onChangeText={setDescription}
@@ -89,14 +94,14 @@ export default function AddScreen() {
           onApplySuggestion={handleApplySuggestion}
           required={false}
         />
-        <Spacer height={theme.spacing.xl} />
+        <Spacer height={theme.spacing.lg} />
         <CategoryPicker
           categories={TRANSACTION_CATEGORIES}
           selectedCategoryId={selectedCategoryId}
           onSelectCategory={setSelectedCategoryId}
           required
         />
-        <Spacer height={theme.spacing.xl} />
+        <Spacer height={theme.spacing.lg} />
         <TransactionMetaFields
           dateLabel={formatDateLabel(selectedDate)}
           paymentIcon={selectedPayment?.icon ?? null}
@@ -104,14 +109,14 @@ export default function AddScreen() {
           onPressDate={handleSelectDate}
           onPressPayment={handleSelectPayment}
         />
-        <Spacer height={theme.spacing.xl} />
+        <Spacer height={theme.spacing.lg} />
         <NotesInputCard value={notes} onChangeText={setNotes} />
-        <Spacer height={theme.spacing.xl} />
+        <Spacer height={theme.spacing.lg} />
         <AddExpenseButton
           onPress={handleAddExpense}
           disabled={isAddExpenseDisabled}
         />
-        <Spacer height={Platform?.OS === "android" ? 80 : theme.spacing.xl} />
+        <Spacer height={Platform?.OS === "android" ? 80 : theme.spacing.lg} />
       </KeyboardAwareScrollView>
       <ModalSelectDate
         ref={dateSheetRef}
@@ -140,6 +145,8 @@ const createStyles = ({
     },
     scrollContainer: {
       flex: 1,
+    },
+    header: {
       paddingTop: Platform.select({
         android: insets.top + theme.spacing.xl,
         ios: insets.top + theme.spacing.sm,

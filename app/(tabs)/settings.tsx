@@ -1,29 +1,55 @@
 import { Theme } from "@/src/constants/theme";
+import AppInfoCard from "@/src/features/settings/components/AppInfoCard";
 import CustomCategoriesCard, {
   CustomCategory,
 } from "@/src/features/settings/components/CustomCategoriesCard";
 import ExportDataCard from "@/src/features/settings/components/ExportDataCard";
 import { ExportFormat } from "@/src/features/settings/components/ExportDataCard/ExportDataCard.types";
+import PreferencesCard from "@/src/features/settings/components/PreferencesCard";
+import { PreferencesState } from "@/src/features/settings/components/PreferencesCard/PreferencesCard.types";
 import ProfileCard from "@/src/features/settings/components/ProfileCard";
+import SecurityPrivacyCard from "@/src/features/settings/components/SecurityPrivacyCard";
 import SyncBackupCard from "@/src/features/settings/components/SyncBackupCard";
-import { MOCK_CATEGORIES } from "@/src/mocks/settings";
 import Spacer from "@/src/shared/components/spacer/Spacer";
 import { ThemedText } from "@/src/shared/components/themed-text/ThemedText";
 import { ThemedView } from "@/src/shared/components/themed-view/ThemedView";
 import { useThemeController } from "@/src/shared/hooks/useThemeController";
 import { useMemo, useState } from "react";
-import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { Alert, Platform, ScrollView, StyleSheet, View } from "react-native";
+import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context";
+
+const MOCK_CATEGORIES: CustomCategory[] = [
+  {
+    id: "1",
+    icon: "☕",
+    name: "Coffee & Drinks",
+    color: "#FF6B35",
+    transactionCount: 15,
+  },
+  {
+    id: "2",
+    icon: "💪",
+    name: "Gym & Fitness",
+    color: "#4CAF50",
+    transactionCount: 8,
+  },
+  {
+    id: "3",
+    icon: "🐕",
+    name: "Pet Expenses",
+    color: "#2196F3",
+    transactionCount: 12,
+  },
+];
 
 export default function SettingsScreen() {
   const { theme, toggleTheme, colorScheme } = useThemeController();
-  const styles = useMemo(() => createStyles({ theme }), [theme]);
-  const nextTheme = colorScheme === "dark" ? "Light" : "Dark";
+  const insets = useSafeAreaInsets();
+
+  const styles = useMemo(
+    () => createStyles({ theme, insets }),
+    [theme, insets],
+  );
 
   const [fullName, setFullName] = useState("Sarah Anderson");
   const [monthlyBudget, setMonthlyBudget] = useState("3500");
@@ -32,6 +58,17 @@ export default function SettingsScreen() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [categories, setCategories] =
     useState<CustomCategory[]>(MOCK_CATEGORIES);
+
+  const [preferences, setPreferences] = useState<PreferencesState>({
+    darkMode: colorScheme === "dark",
+    pushNotifications: true,
+    budgetAlerts: true,
+  });
+
+  const handleTogglePreference = (key: keyof PreferencesState) => {
+    if (key === "darkMode") toggleTheme();
+    setPreferences((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   const handleExport = (format: ExportFormat) => {
     setIsExporting(true);
@@ -63,12 +100,10 @@ export default function SettingsScreen() {
   const handleAddCategory = (
     data: Omit<CustomCategory, "id" | "transactionCount">,
   ) => {
-    const newCategory: CustomCategory = {
-      ...data,
-      id: Date.now().toString(),
-      transactionCount: 0,
-    };
-    setCategories((prev) => [...prev, newCategory]);
+    setCategories((prev) => [
+      ...prev,
+      { ...data, id: Date.now().toString(), transactionCount: 0 },
+    ]);
   };
 
   const handleEditCategory = (updated: CustomCategory) => {
@@ -87,11 +122,11 @@ export default function SettingsScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        <ThemedText type="titleMedium" style={styles.title}>
-          Settings
-        </ThemedText>
+        <View style={styles.header}>
+          <ThemedText type="titleMedium">Settings</ThemedText>
+        </View>
 
-        <Spacer height={theme.spacing.default} />
+        <Spacer height={theme.spacing.lg} />
 
         <ProfileCard
           fullName={fullName}
@@ -100,11 +135,11 @@ export default function SettingsScreen() {
           onMonthlyBudgetChange={setMonthlyBudget}
         />
 
-        <Spacer height={theme.spacing.default} />
+        <Spacer height={theme.spacing.lg} />
 
         <ExportDataCard onExport={handleExport} isExporting={isExporting} />
 
-        <Spacer height={theme.spacing.default} />
+        <Spacer height={theme.spacing.lg} />
 
         <SyncBackupCard
           status="connected"
@@ -115,7 +150,7 @@ export default function SettingsScreen() {
           isSyncing={isSyncing}
         />
 
-        <Spacer height={theme.spacing.default} />
+        <Spacer height={theme.spacing.lg} />
 
         <CustomCategoriesCard
           categories={categories}
@@ -124,15 +159,24 @@ export default function SettingsScreen() {
           onDelete={handleDeleteCategory}
         />
 
-        <Spacer height={theme.spacing.xl} />
+        <Spacer height={theme.spacing.lg} />
 
-        <TouchableOpacity
-          onPress={toggleTheme}
-          style={styles.button}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.buttonText}>Switch to {nextTheme} Theme</Text>
-        </TouchableOpacity>
+        <PreferencesCard
+          preferences={preferences}
+          onToggle={handleTogglePreference}
+        />
+
+        <Spacer height={theme.spacing.lg} />
+
+        <SecurityPrivacyCard
+          onManagePaymentMethods={() => Alert.alert("Manage Payment Methods")}
+          onChangePassword={() => Alert.alert("Change Password")}
+          onPrivacySettings={() => Alert.alert("Privacy Settings")}
+        />
+
+        <Spacer height={theme.spacing.lg} />
+
+        <AppInfoCard />
 
         <Spacer height={theme.spacing["2xl"]} />
       </ScrollView>
@@ -140,22 +184,21 @@ export default function SettingsScreen() {
   );
 }
 
-const createStyles = ({ theme }: { theme: Theme }) =>
+const createStyles = ({
+  theme,
+  insets,
+}: {
+  theme: Theme;
+  insets: EdgeInsets;
+}) =>
   StyleSheet.create({
     container: { flex: 1 },
+    header: {
+      paddingTop: Platform.select({
+        android: insets.top + theme.spacing.xl,
+        ios: insets.top + theme.spacing.sm,
+        web: theme.spacing.default,
+      }),
+    },
     scrollContent: { paddingHorizontal: theme.spacing.default },
-    title: { paddingTop: theme.spacing.xl },
-    button: {
-      minHeight: 52,
-      alignItems: "center",
-      justifyContent: "center",
-      borderRadius: theme.radii.md,
-      paddingHorizontal: theme.spacing.default,
-      backgroundColor: theme.colors.primary,
-    },
-    buttonText: {
-      color: "#FFFFFF",
-      fontSize: 16,
-      fontWeight: "700",
-    },
   });

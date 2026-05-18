@@ -10,6 +10,7 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
       borderRadius: theme.radii.lg,
       borderWidth: 1,
       borderColor: theme.colors.border,
+      ...theme.shadows.sm,
     },
     label: {
       color: theme.colors.text,

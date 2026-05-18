@@ -16,6 +16,7 @@ export const createStyles = ({
       borderRadius: theme.radii.lg,
       borderWidth: 1,
       borderColor: theme.colors.border,
+      ...theme.shadows.sm,
     },
     label: {
       color: theme.colors.text,
@@ -36,7 +37,7 @@ export const createStyles = ({
       gap: theme.spacing.md,
       padding: theme.spacing.default,
       borderWidth: 1,
-      borderColor: theme.colors.primaryBorder,
+      borderColor: theme.colors.aiBorderColor,
       borderRadius: theme.radii.md,
       backgroundColor: theme.colors.aiCard,
     },
@@ -47,7 +48,6 @@ export const createStyles = ({
     suggestionIconWrapper: {
       padding: theme.spacing.sm,
       borderRadius: theme.radii.md,
-      backgroundColor: theme.colors.surfacePrimary,
       ...theme.flex.rowCenterCenter,
     },
     suggestionTitle: {

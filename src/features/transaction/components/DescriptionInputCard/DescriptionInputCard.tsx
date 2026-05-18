@@ -52,15 +52,12 @@ const DescriptionInputCard = React.memo(
                   color={theme.colors.ai}
                 />
               </View>
-              <ThemedText
-                type="labelMediumSemibold"
-                style={styles.suggestionTitle}
-              >
+              <ThemedText type="labelMediumSemibold" colorVariant="aiWhite">
                 AI Suggestion
               </ThemedText>
             </View>
 
-            <ThemedText type="labelMediumMedium" style={styles.suggestionText}>
+            <ThemedText type="labelMediumMedium" colorVariant="aiWhite">
               {suggestion}
             </ThemedText>
 

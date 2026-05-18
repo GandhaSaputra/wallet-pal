@@ -2,18 +2,23 @@ import { Theme } from "@/src/constants/theme";
 import { ThemedText } from "@/src/shared/components/themed-text/ThemedText";
 import { useTheme } from "@/src/shared/hooks/useThemeController";
 import { Feather } from "@expo/vector-icons";
-import React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import React, { useMemo } from "react";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
+import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context";
 
 const SearchFilterHeader = ({
   onFilterPress,
 }: {
   onFilterPress: () => void;
 }) => {
+  const insets = useSafeAreaInsets();
   const theme = useTheme();
-  const styles = createStyles({ theme });
+  const styles = useMemo(
+    () => createStyles({ theme, insets }),
+    [theme, insets],
+  );
   return (
-    <View style={[theme.flex.rowCenterBetween, styles.header]}>
+    <View style={[theme.flex.rowCenterBetween, styles.container]}>
       <ThemedText type="titleMedium">Search & Filter</ThemedText>
       <Pressable
         onPress={onFilterPress}
@@ -28,10 +33,23 @@ const SearchFilterHeader = ({
 
 export default SearchFilterHeader;
 
-const createStyles = ({ theme }: { theme: Theme }) =>
+const createStyles = ({
+  theme,
+  insets,
+}: {
+  theme: Theme;
+  insets: EdgeInsets;
+}) =>
   StyleSheet.create({
-    header: {
-      paddingTop: theme.spacing.xl,
+    container: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingTop: Platform.select({
+        android: insets.top + theme.spacing.xl,
+        ios: insets.top + theme.spacing.sm,
+        web: theme.spacing.default,
+      }),
     },
     filterButton: {
       width: 40,

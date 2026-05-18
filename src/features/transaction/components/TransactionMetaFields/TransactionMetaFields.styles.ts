@@ -4,8 +4,9 @@ import { StyleSheet } from "react-native";
 export const createStyles = ({ theme }: { theme: Theme }) =>
   StyleSheet.create({
     row: {
-      ...theme.flex.rowCenterBetween,
       gap: theme.spacing.default,
+      ...theme.flex.rowCenterBetween,
+      ...theme.shadows.sm,
     },
     card: {
       flex: 1,
