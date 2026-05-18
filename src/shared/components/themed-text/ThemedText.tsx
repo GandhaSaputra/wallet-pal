@@ -1,31 +1,67 @@
+import {
+  ThemeColors,
+  TypographyVariant,
+  typography,
+} from "@/src/constants/theme";
+import { useThemeColor } from "@/src/shared/hooks/useThemeColor";
 import { StyleSheet, Text, type TextProps } from "react-native";
 
-import { useThemeColor } from "@/src/shared/hooks/useThemeColor";
+export type ThemedTextType = TypographyVariant | "title" | "subtitle" | "link";
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
+  type?: ThemedTextType;
+  colorVariant?: keyof ThemeColors;
+  // Dynamic overrides
+  fontSize?: number;
+  fontWeight?: TextProps["style"] extends { fontWeight?: infer W } ? W : never;
+  lineHeight?: number;
+  letterSpacing?: number;
+  textAlign?: "left" | "center" | "right" | "justify";
+  textTransform?: "none" | "uppercase" | "lowercase" | "capitalize";
+  italic?: boolean;
+  underline?: boolean;
 };
 
 export function ThemedText({
   style,
   lightColor,
   darkColor,
-  type = "default",
+  type = "labelMediumSmall",
+  colorVariant = "text",
+  fontSize,
+  fontWeight,
+  lineHeight,
+  letterSpacing,
+  textAlign,
+  textTransform,
+  italic,
+  underline,
   ...rest
 }: ThemedTextProps) {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
+  const color = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    colorVariant,
+  );
+
+  const dynamicStyle = {
+    ...(fontSize !== undefined && { fontSize }),
+    ...(fontWeight !== undefined && { fontWeight }),
+    ...(lineHeight !== undefined && { lineHeight }),
+    ...(letterSpacing !== undefined && { letterSpacing }),
+    ...(textAlign !== undefined && { textAlign }),
+    ...(textTransform !== undefined && { textTransform }),
+    ...(italic && { fontStyle: "italic" as const }),
+    ...(underline && { textDecorationLine: "underline" as const }),
+  };
 
   return (
     <Text
       style={[
         { color },
-        type === "default" ? styles.default : undefined,
-        type === "title" ? styles.title : undefined,
-        type === "defaultSemiBold" ? styles.defaultSemiBold : undefined,
-        type === "subtitle" ? styles.subtitle : undefined,
-        type === "link" ? styles.link : undefined,
+        type === "link" ? styles.link : getTypographyStyle(type),
+        dynamicStyle,
         style,
       ]}
       {...rest}
@@ -33,28 +69,26 @@ export function ThemedText({
   );
 }
 
+function getTypographyStyle(type: ThemedTextType) {
+  if (type === "title") {
+    return typography.titleLarge;
+  }
+
+  if (type === "subtitle") {
+    return typography.titleMedium;
+  }
+
+  if (type === "link") {
+    return styles.link;
+  }
+
+  return typography[type];
+}
+
 const styles = StyleSheet.create({
-  default: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  defaultSemiBold: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontWeight: "600",
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    lineHeight: 32,
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
   link: {
-    lineHeight: 30,
-    fontSize: 16,
+    ...typography.bodyMedium,
     color: "#0a7ea4",
+    textDecorationLine: "underline",
   },
 });

@@ -1,4 +1,4 @@
-import { Platform, TextStyle } from "react-native";
+import { Platform, TextStyle, ViewStyle } from "react-native";
 
 export const BrandColors = {
   primary: "#5638F5",
@@ -6,10 +6,16 @@ export const BrandColors = {
   primaryPressed: "#4329D9",
   primarySoft: "#EEF1FF",
   primaryBorder: "#9BA8FF",
-  secondary: "#2F80ED",
+  primaryText: "#7C67FF",
+  primarySurface: "#dfe7ff",
+  primarySurfaceDark: "rgba(223, 231, 255, 0.5)",
+  secondary: "#165dfc",
   accentPurple: "#A020F0",
   aiBlue: "#0B57FF",
-  success: "#00C853",
+  aiSurface: "#eef6ff",
+  aiSurfaceDarker: "rgba(238, 246, 255, 0.5)",
+  aiBorderColor: "rgba(11, 88, 255, 0.3)",
+  success: "#00a63d",
   successSoft: "#EAFBF1",
   warning: "#FF4B00",
   warningSoft: "#FFF6E8",
@@ -21,11 +27,19 @@ export const BrandColors = {
   shopping: "#F5B400",
   others: "#9CA3AF",
   chartLine: "#6266F1",
+  insight: "#fff9c2",
+  insightIcon: "#d08800",
 } as const;
 
 export const NeutralColors = {
   white: "#FFFFFF",
+  whiteOpacity50: "rgba(255, 255, 255, 0.5)",
+  whiteOpacity25: "rgba(255, 255, 255, 0.25)",
+  whiteOpacity10: "rgba(255, 255, 255, 0.10)",
   black: "#000000",
+  blackOpacity50: "rgba(0, 0, 0, 0.5)",
+  blackOpacity25: "rgba(0, 0, 0, 0.25)",
+  blackOpacity10: "rgba(0, 0, 0, 0.10)",
   gray25: "#FCFCFD",
   gray50: "#F9FAFB",
   gray100: "#F3F4F6",
@@ -50,19 +64,28 @@ export const Colors = {
     secondary: BrandColors.secondary,
     accent: BrandColors.accentPurple,
     ai: BrandColors.aiBlue,
+    aiWhite: BrandColors.aiBlue,
+    aiSurface: BrandColors.aiSurface,
+    aiDarkerSurface: BrandColors.aiSurfaceDarker,
+    aiBorderColor: BrandColors.aiBorderColor,
     success: BrandColors.success,
     warning: BrandColors.warning,
     danger: BrandColors.danger,
     text: NeutralColors.gray900,
-    textSecondary: NeutralColors.gray500,
+    textPrimary: BrandColors.primary,
+    textSecondary: NeutralColors.gray600,
     textMuted: NeutralColors.gray400,
     background: NeutralColors.gray50,
+    reverseBackground: NeutralColors.gray900,
     surface: NeutralColors.white,
+    surfacePrimary: BrandColors.primarySurface,
     surfaceMuted: NeutralColors.gray100,
+    muted: NeutralColors.gray150,
     card: NeutralColors.white,
     cardElevated: NeutralColors.white,
     border: NeutralColors.gray200,
     borderStrong: NeutralColors.gray300,
+    primaryBorder: BrandColors.primaryBorder,
     input: NeutralColors.gray50,
     inputBorder: NeutralColors.gray300,
     tint: BrandColors.primary,
@@ -79,37 +102,48 @@ export const Colors = {
     warningCard: BrandColors.warningSoft,
     dangerCard: BrandColors.dangerSoft,
     bottomBarSelectedWrapper: BrandColors.primarySoft,
+    modalBackdrop: "rgba(17, 24, 39, 0.45)",
+    white: NeutralColors.white,
   },
   dark: {
-    brand: "#7C67FF",
-    primary: "#7C67FF",
-    primaryPressed: "#9B8BFF",
+    brand: BrandColors.primary,
+    primary: BrandColors.primary,
+    primaryPressed: BrandColors.primaryPressed,
     primarySoft: "#211D45",
-    secondary: "#6EA8FF",
+    secondary: BrandColors.secondary,
     accent: "#C084FC",
-    ai: "#7DB1FF",
-    success: "#4ADE80",
+    ai: BrandColors.aiBlue,
+    aiWhite: NeutralColors.white,
+    aiSurface: BrandColors.aiSurface,
+    aiDarkerSurface: BrandColors.aiSurfaceDarker,
+    aiBorderColor: BrandColors.aiBorderColor,
+    success: BrandColors.success,
     warning: "#FF8A3D",
     danger: "#FF5A67",
     text: "#F7F7FB",
-    textSecondary: "#B7BDCB",
+    textPrimary: BrandColors.primaryText,
+    textSecondary: NeutralColors.gray300,
     textMuted: "#7E8798",
     background: "#0B1020",
+    reverseBackground: NeutralColors.gray50,
     surface: "#12182A",
+    surfacePrimary: BrandColors.primaryOpacity15,
     surfaceMuted: "#1A2236",
+    muted: "#1A2236",
     card: "#151D31",
     cardElevated: "#1B2540",
     border: "#273149",
     borderStrong: "#35405C",
+    primaryBorder: BrandColors.primaryBorder,
     input: "#101729",
     inputBorder: "#35405C",
-    tint: "#7C67FF",
+    tint: BrandColors.primary,
     icon: "#B7BDCB",
     tabBar: "#111827",
-    tabIconDefault: "#8B93A5",
-    tabIconSelected: "#8B7BFF",
-    shadow: NeutralColors.black,
-    progressTrack: "#2E245A",
+    tabIconDefault: NeutralColors.gray400,
+    tabIconSelected: BrandColors.primaryText,
+    shadow: BrandColors.primary,
+    progressTrack: "#8E54EF",
     progressFill: "#7C67FF",
     chartGrid: "#202A40",
     aiCard: "#122747",
@@ -117,6 +151,8 @@ export const Colors = {
     warningCard: "#331F0E",
     dangerCard: "#35151B",
     bottomBarSelectedWrapper: BrandColors.primaryOpacity15,
+    modalBackdrop: "rgba(0, 0, 0, 0.68)",
+    white: NeutralColors.white,
   },
 };
 
@@ -130,34 +166,51 @@ function createFontStyle(
   lineHeight: number,
   fontWeight: FontWeight = "400",
 ): TextStyle {
-  return {
-    fontSize,
-    lineHeight,
-    fontWeight,
-  };
+  return { fontSize, lineHeight, fontWeight };
 }
 
-export const fontStyles = {
-  regular: { fontWeight: "400" as FontWeight },
-  medium: { fontWeight: "500" as FontWeight },
-  semibold: { fontWeight: "600" as FontWeight },
-  bold: { fontWeight: "700" as FontWeight },
-  extraBold: { fontWeight: "800" as FontWeight },
-};
-
 export const typography = {
+  // Display — for hero numbers, splash screen
   displayLarge: createFontStyle(40, 48, "800"),
   displayMedium: createFontStyle(32, 40, "800"),
+
+  // Title — section headings, page titles
   titleLarge: createFontStyle(28, 34, "800"),
   titleMedium: createFontStyle(22, 28, "700"),
   titleSmall: createFontStyle(18, 24, "700"),
-  bodyLarge: createFontStyle(18, 26),
-  bodyMedium: createFontStyle(16, 24),
-  bodySmall: createFontStyle(14, 20),
+
+  // Body — main content, descriptions
+  bodyLarge: createFontStyle(18, 24, "400"),
+  bodyLargeMedium: createFontStyle(18, 24, "500"),
+  bodyLargeSemibold: createFontStyle(18, 24, "600"),
+  bodyMedium: createFontStyle(16, 24, "400"),
+  bodyMediumMedium: createFontStyle(16, 24, "500"),
+  bodyMediumSemibold: createFontStyle(16, 24, "600"),
+  bodySmall: createFontStyle(14, 20, "400"),
+  bodySmallMedium: createFontStyle(14, 20, "500"),
+  bodySmallSemibold: createFontStyle(14, 20, "600"),
+
+  // Label — tags, badges, button text, captions
   labelLarge: createFontStyle(16, 22, "700"),
-  labelMedium: createFontStyle(14, 20, "600"),
+  labelLargeMedium: createFontStyle(16, 22, "500"),
+  labelMediumSemibold: createFontStyle(14, 20, "600"),
+  labelMediumMedium: createFontStyle(14, 20, "500"),
+  labelMediumSmall: createFontStyle(14, 20, "400"),
   labelSmall: createFontStyle(12, 16, "600"),
-};
+  labelSmallMedium: createFontStyle(12, 16, "500"),
+  labelSmallRegular: createFontStyle(12, 16, "400"),
+
+  // Caption — timestamps, hint text, footnotes
+  caption: createFontStyle(11, 16, "400"),
+  captionMedium: createFontStyle(11, 16, "500"),
+
+  // Numeric — amounts, balances, prices (tabular figures)
+  numericLarge: createFontStyle(28, 34, "700"),
+  numericMedium: createFontStyle(22, 28, "600"),
+  numericSmall: createFontStyle(16, 22, "600"),
+} satisfies Record<string, TextStyle>;
+
+export type TypographyVariant = keyof typeof typography;
 
 export const spacing = {
   xs: 4,
@@ -171,6 +224,7 @@ export const spacing = {
 };
 
 export const iconSizes = {
+  xs: 12,
   sm: 16,
   md: 20,
   default: 24,
@@ -191,25 +245,128 @@ export const borders = {
 
 export const radii = borders;
 
+export const flexStyles = {
+  rowStartStart: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+  },
+  rowStartCenter: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "center",
+  },
+  rowStartBetween: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+  },
+  rowCenterCenter: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  rowCenterStart: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
+  rowCenterBetween: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  columnStartCenter: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+  },
+  columnCenterCenter: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  columnCenterBetween: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+} satisfies Record<string, ViewStyle>;
+
 export const shadows = {
   card: {
+    shadowColor: NeutralColors.black,
     shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.08,
-    shadowRadius: 18,
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  button: {
+    shadowColor: NeutralColors.black,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  xs: {
+    shadowColor: NeutralColors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 0.08,
+    elevation: 2,
+  },
+  sm: {
+    shadowColor: NeutralColors.black,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: Platform.OS === "web" ? 6 : 3,
     elevation: 4,
   },
+  lg: {
+    shadowColor: NeutralColors.black,
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.12,
+    shadowRadius: 24,
+    elevation: 8,
+  },
 };
+
+export const Fonts = Platform.select({
+  ios: {
+    sans: "system-ui",
+    serif: "ui-serif",
+    rounded: "ui-rounded",
+    mono: "ui-monospace",
+  },
+  default: {
+    sans: "normal",
+    serif: "serif",
+    rounded: "normal",
+    mono: "monospace",
+  },
+  web: {
+    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    serif: "Georgia, 'Times New Roman', serif",
+    rounded:
+      "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
+    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+  },
+})!;
+
+export type FontFamily = typeof Fonts;
 
 export type Theme = {
   name: AppThemeName;
   isDark: boolean;
   colors: ThemeColors;
   fonts: typeof typography;
+  fontFamily: FontFamily;
   spacing: typeof spacing;
   iconSizes: typeof iconSizes;
   borders: typeof borders;
   radii: typeof radii;
   shadows: typeof shadows;
+  flex: typeof flexStyles;
 };
 
 function createTheme(name: AppThemeName): Theme {
@@ -218,11 +375,13 @@ function createTheme(name: AppThemeName): Theme {
     isDark: name === "dark",
     colors: Colors[name],
     fonts: typography,
+    fontFamily: Fonts,
     spacing,
     borders,
     radii,
     shadows,
     iconSizes,
+    flex: flexStyles,
   };
 }
 
@@ -243,32 +402,10 @@ export const CategoryColors = {
 } as const;
 
 export const Gradients = {
-  primaryCard: [BrandColors.primary, BrandColors.accentPurple],
+  primaryCard: [
+    BrandColors.primaryPressed,
+    BrandColors.primary,
+    BrandColors.accentPurple,
+  ],
   darkPrimaryCard: ["#4C35D8", "#7B1FEA"],
 } as const;
-
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: "system-ui",
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: "ui-serif",
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: "ui-rounded",
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: "ui-monospace",
-  },
-  default: {
-    sans: "normal",
-    serif: "serif",
-    rounded: "normal",
-    mono: "monospace",
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded:
-      "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-  },
-});

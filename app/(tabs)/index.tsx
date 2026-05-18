@@ -1,65 +1,54 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 
 import { Theme } from "@/src/constants/theme";
-import { useThemeController } from "@/src/shared/hooks/useThemeController";
+import SpendingByCategoryCard from "@/src/features/analytics/components/SpendingByCategoryCard";
+import BudgetInsightRow from "@/src/features/budget/components/BudgetInsightRow";
+import BudgetSummaryCard from "@/src/features/budget/components/BudgetSummaryCard";
+import RecentTransactionsCard from "@/src/features/transaction/components/RecentTransactionsCard";
+import { MOCK_SPENDING } from "@/src/mocks/analytics";
+import { MOCK_BUDGET } from "@/src/mocks/budget";
+import { MOCK_TRANSACTIONS } from "@/src/mocks/tranasactions";
+import HomeHeader from "@/src/shared/components/header/HomeHeader";
+import Spacer from "@/src/shared/components/spacer/Spacer";
+import { ThemedView } from "@/src/shared/components/themed-view/ThemedView";
+import { useTheme } from "@/src/shared/hooks/useThemeController";
+import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
-  const { colorScheme, theme, toggleTheme } = useThemeController();
-  const styles = createStyles(theme);
-  const nextTheme = colorScheme === "dark" ? "Light" : "Dark";
+  const router = useRouter();
+  const theme = useTheme();
+  const styles = createStyles({ theme });
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
-      <Text style={styles.subtitle}>Current theme: {colorScheme}</Text>
-      <Pressable
-        onPress={toggleTheme}
-        style={({ pressed }) => [
-          styles.button,
-          pressed ? styles.buttonPressed : undefined,
-        ]}
+    <ThemedView style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.buttonText}>Switch to {nextTheme} Theme</Text>
-      </Pressable>
-    </View>
+        <HomeHeader />
+        <Spacer height={theme.spacing.xl} />
+        <BudgetSummaryCard {...MOCK_BUDGET} />
+        <Spacer height={theme.spacing.xl} />
+        <SpendingByCategoryCard items={MOCK_SPENDING} month="January 2025" />
+        <Spacer height={theme.spacing.xl} />
+        <RecentTransactionsCard
+          transactions={MOCK_TRANSACTIONS}
+          onViewAll={() => router.push("/search")}
+        />
+        <Spacer height={theme.spacing.xl} />
+        <BudgetInsightRow vsLastMonthPercentage={8.5} daysLeft={9} />
+        <Spacer height={theme.spacing.xl} />
+      </ScrollView>
+    </ThemedView>
   );
 }
 
-const createStyles = (theme: Theme) =>
+const createStyles = ({ theme }: { theme: Theme }) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-      padding: theme.spacing.xl,
-      backgroundColor: theme.colors.background,
     },
-    title: {
-      ...theme.fonts.displayMedium,
-      color: theme.colors.text,
-    },
-    subtitle: {
-      ...theme.fonts.bodyMedium,
-      marginTop: theme.spacing.sm,
-      color: theme.colors.textSecondary,
-    },
-    button: {
-      minHeight: 52,
-      minWidth: 220,
-      alignItems: "center",
-      justifyContent: "center",
-      borderRadius: theme.borders.default,
-      borderWidth: 1,
-      borderColor: theme.colors.primary,
-      marginTop: theme.spacing.xl,
-      paddingHorizontal: theme.spacing.lg,
-      backgroundColor: theme.colors.primary,
-    },
-    buttonPressed: {
-      backgroundColor: theme.colors.primaryPressed,
-    },
-    buttonText: {
-      ...theme.fonts.labelLarge,
-      color: "#FFFFFF",
+    contentContainer: {
+      paddingHorizontal: theme.spacing.default,
     },
   });
