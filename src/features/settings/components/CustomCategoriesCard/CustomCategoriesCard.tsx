@@ -88,8 +88,19 @@ const CustomCategoriesCard = React.memo(
     const modalRef = useRef<ModalAddCategoryRef>(null);
 
     const handleEdit = (category: CustomCategory) => {
-      // Pass existing category to modal for pre-fill
       modalRef.current?.show(category);
+    };
+
+    const handleSave = (
+      data: Omit<CustomCategory, "id" | "transactionCount">,
+      currentCategory?: CustomCategory,
+    ) => {
+      if (currentCategory) {
+        onEdit({ ...currentCategory, ...data });
+        return;
+      }
+
+      onAdd(data);
     };
 
     return (
@@ -142,7 +153,7 @@ const CustomCategoriesCard = React.memo(
           )}
         </View>
 
-        <ModalAddCategory ref={modalRef} onSave={onAdd} />
+        <ModalAddCategory ref={modalRef} onSave={handleSave} />
       </>
     );
   },

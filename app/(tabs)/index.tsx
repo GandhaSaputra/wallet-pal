@@ -4,10 +4,9 @@ import { Theme } from "@/src/constants/theme";
 import SpendingByCategoryCard from "@/src/features/analytics/components/SpendingByCategoryCard";
 import BudgetInsightRow from "@/src/features/budget/components/BudgetInsightRow";
 import BudgetSummaryCard from "@/src/features/budget/components/BudgetSummaryCard";
+import { useBudgetStore } from "@/src/features/budget/budget.store";
 import RecentTransactionsCard from "@/src/features/transaction/components/RecentTransactionsCard";
-import { MOCK_SPENDING } from "@/src/mocks/analytics";
-import { MOCK_BUDGET } from "@/src/mocks/budget";
-import { MOCK_TRANSACTIONS } from "@/src/mocks/tranasactions";
+import { useTransactions } from "@/src/features/transaction/hooks/useTransactions";
 import HomeHeader from "@/src/shared/components/header/HomeHeader";
 import Spacer from "@/src/shared/components/spacer/Spacer";
 import { ThemedView } from "@/src/shared/components/themed-view/ThemedView";
@@ -18,6 +17,10 @@ export default function HomeScreen() {
   const router = useRouter();
   const theme = useTheme();
   const styles = createStyles({ theme });
+  const budgetSummary = useBudgetStore((state) => state.summary);
+  const spendingByCategory = useBudgetStore((state) => state.spendingByCategory);
+  const monthLabel = useBudgetStore((state) => state.monthLabel);
+  const { recentTransactions } = useTransactions();
 
   return (
     <ThemedView style={styles.container}>
@@ -27,12 +30,12 @@ export default function HomeScreen() {
       >
         <HomeHeader />
         <Spacer height={theme.spacing.xl} />
-        <BudgetSummaryCard {...MOCK_BUDGET} />
+        <BudgetSummaryCard {...budgetSummary} />
         <Spacer height={theme.spacing.xl} />
-        <SpendingByCategoryCard items={MOCK_SPENDING} month="January 2025" />
+        <SpendingByCategoryCard items={spendingByCategory} month={monthLabel} />
         <Spacer height={theme.spacing.xl} />
         <RecentTransactionsCard
-          transactions={MOCK_TRANSACTIONS}
+          transactions={recentTransactions}
           onViewAll={() => router.push("/search")}
         />
         <Spacer height={theme.spacing.xl} />

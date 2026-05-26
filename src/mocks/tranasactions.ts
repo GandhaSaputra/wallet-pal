@@ -9,6 +9,7 @@ export const MOCK_TRANSACTIONS: TransactionItem[] = [
     categoryLabel: "Food",
     date: "Today",
     amount: -8.75,
+    paymentMethod: "Credit Card",
   },
   {
     id: "2",
@@ -18,6 +19,7 @@ export const MOCK_TRANSACTIONS: TransactionItem[] = [
     categoryLabel: "Transport",
     date: "Today",
     amount: -22.5,
+    paymentMethod: "Digital Wallet",
   },
   {
     id: "3",
@@ -27,6 +29,7 @@ export const MOCK_TRANSACTIONS: TransactionItem[] = [
     categoryLabel: "Food",
     date: "Yesterday",
     amount: -156.8,
+    paymentMethod: "Credit Card",
   },
   {
     id: "4",
@@ -36,5 +39,6 @@ export const MOCK_TRANSACTIONS: TransactionItem[] = [
     categoryLabel: "Bills",
     date: "Yesterday",
     amount: -9.99,
+    paymentMethod: "Cash",
   },
 ];
