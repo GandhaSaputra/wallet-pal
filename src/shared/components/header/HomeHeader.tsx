@@ -1,5 +1,6 @@
 import { NeutralColors, Theme } from "@/src/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useMemo } from "react";
 import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context";
@@ -18,13 +19,15 @@ const HomeHeader = () => {
   const title = `Hello, ${username}! 👋`;
   const subtitle = "Track your expenses wisely";
 
+    const router = useRouter();
+
   return (
     <View style={styles.container}>
       <View>
         <ThemedText type="titleMedium">{title}</ThemedText>
         <ThemedText colorVariant="textSecondary">{subtitle}</ThemedText>
       </View>
-      <TouchableOpacity activeOpacity={0.7} style={styles.addButton}>
+      <TouchableOpacity activeOpacity={0.7} style={styles.addButton} onPress={() => router.push("/add")}>
         <Ionicons
           name="add"
           size={theme.iconSizes.default}
