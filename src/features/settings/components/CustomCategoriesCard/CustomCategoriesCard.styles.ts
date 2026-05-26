@@ -64,4 +64,51 @@ export const createStyles = ({ theme }: { theme: Theme }) =>
       paddingVertical: theme.spacing.xl,
       gap: theme.spacing.sm,
     },
+    indicatorStyle: {
+      backgroundColor: theme.colors.border,
+    },
+    containerIndicatorStyle: {
+      backgroundColor: theme.colors.card,
+      borderTopLeftRadius: theme.radii.lg,
+      borderTopRightRadius: theme.radii.lg,
+    },
+    deleteContentContainer: {
+      backgroundColor: theme.colors.card,
+      paddingHorizontal: theme.spacing.default,
+      paddingBottom: theme.spacing["2xl"],
+      gap: theme.spacing.lg,
+      alignItems: "center",
+    },
+    deleteIconWrapper: {
+      width: 56,
+      height: 56,
+      borderRadius: theme.radii.md,
+      backgroundColor: theme.colors.dangerCard,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    deleteCopy: {
+      gap: theme.spacing.sm,
+      alignItems: "center",
+    },
+    deleteActions: {
+      flexDirection: "row",
+      gap: theme.spacing.sm,
+      width: "100%",
+    },
+    deleteActionButton: {
+      flex: 1,
+      borderRadius: theme.radii.md,
+      paddingVertical: theme.spacing.md,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    cancelDeleteButton: {
+      backgroundColor: theme.colors.surfaceMuted,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+    },
+    confirmDeleteButton: {
+      backgroundColor: theme.colors.danger,
+    },
   });

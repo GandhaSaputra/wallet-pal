@@ -1,8 +1,19 @@
 import { ThemedText } from "@/src/shared/components/themed-text/ThemedText";
 import { useTheme } from "@/src/shared/hooks/useThemeController";
 import { Feather } from "@expo/vector-icons";
-import React, { useMemo, useRef } from "react";
-import { Alert, TouchableOpacity, View } from "react-native";
+import {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import React, {
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { TouchableOpacity, View } from "react-native";
 import { createStyles } from "./CustomCategoriesCard.styles";
 import {
   CustomCategoriesCardProps,
@@ -10,31 +21,27 @@ import {
 } from "./CustomCategoriesCard.types";
 import ModalAddCategory, { ModalAddCategoryRef } from "./ModalAddCategory";
 
+type DeleteCategoryModalRef = {
+  show: (category: CustomCategory) => void;
+  hide: () => void;
+};
+
+type DeleteCategoryModalProps = {
+  onConfirm: (id: string) => void;
+  styles: ReturnType<typeof createStyles>;
+  theme: ReturnType<typeof useTheme>;
+};
+
 type CategoryItemProps = {
   category: CustomCategory;
   onEdit: (category: CustomCategory) => void;
-  onDelete: (id: string) => void;
+  onDeletePress: (category: CustomCategory) => void;
   styles: ReturnType<typeof createStyles>;
   theme: ReturnType<typeof useTheme>;
 };
 
 const CategoryItem = React.memo(
-  ({ category, onEdit, onDelete, styles, theme }: CategoryItemProps) => {
-    const handleDelete = () => {
-      Alert.alert(
-        "Delete Category",
-        `Are you sure you want to delete "${category.name}"?`,
-        [
-          { text: "Cancel", style: "cancel" },
-          {
-            text: "Delete",
-            style: "destructive",
-            onPress: () => onDelete(category.id),
-          },
-        ],
-      );
-    };
-
+  ({ category, onEdit, onDeletePress, styles, theme }: CategoryItemProps) => {
     return (
       <View style={styles.categoryItem}>
         <View
@@ -64,7 +71,7 @@ const CategoryItem = React.memo(
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.iconButton]}
-            onPress={handleDelete}
+            onPress={() => onDeletePress(category)}
             hitSlop={4}
           >
             <Feather
@@ -81,14 +88,118 @@ const CategoryItem = React.memo(
 
 CategoryItem.displayName = "CategoryItem";
 
+const DeleteCategoryModal = React.memo(
+  React.forwardRef<DeleteCategoryModalRef, DeleteCategoryModalProps>(
+    ({ onConfirm, styles, theme }, ref) => {
+      const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+      const [category, setCategory] = useState<CustomCategory | null>(null);
+
+      const showModal = useCallback((selectedCategory: CustomCategory) => {
+        setCategory(selectedCategory);
+        bottomSheetModalRef.current?.present();
+      }, []);
+
+      const hideModal = useCallback(() => {
+        bottomSheetModalRef.current?.close();
+      }, []);
+
+      useImperativeHandle(ref, () => ({ show: showModal, hide: hideModal }), [
+        showModal,
+        hideModal,
+      ]);
+
+      const renderBackdrop = useCallback(
+        (backdropProps: any) => (
+          <BottomSheetBackdrop
+            opacity={0.7}
+            {...backdropProps}
+            appearsOnIndex={0}
+            disappearsOnIndex={-1}
+          />
+        ),
+        [],
+      );
+
+      const handleConfirm = () => {
+        if (!category) return;
+
+        onConfirm(category.id);
+        hideModal();
+      };
+
+      return (
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          snapPoints={["36%"]}
+          backdropComponent={renderBackdrop}
+          enableDynamicSizing
+          handleIndicatorStyle={styles.indicatorStyle}
+          handleStyle={styles.containerIndicatorStyle}
+        >
+          <BottomSheetView style={styles.deleteContentContainer}>
+            <View style={styles.deleteIconWrapper}>
+              <Feather
+                name="trash-2"
+                size={theme.iconSizes.default}
+                color={theme.colors.danger}
+              />
+            </View>
+
+            <View style={styles.deleteCopy}>
+              <ThemedText type="titleSmall" textAlign="center">
+                Delete Category
+              </ThemedText>
+              <ThemedText
+                type="bodySmall"
+                colorVariant="textSecondary"
+                textAlign="center"
+              >
+                {category
+                  ? `Delete "${category.name}" from your custom categories?`
+                  : "Delete this category from your custom categories?"}
+              </ThemedText>
+            </View>
+
+            <View style={styles.deleteActions}>
+              <TouchableOpacity
+                activeOpacity={0.75}
+                onPress={hideModal}
+                style={[styles.deleteActionButton, styles.cancelDeleteButton]}
+              >
+                <ThemedText type="bodyMediumSemibold">Cancel</ThemedText>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.75}
+                onPress={handleConfirm}
+                style={[styles.deleteActionButton, styles.confirmDeleteButton]}
+              >
+                <ThemedText type="bodyMediumSemibold" colorVariant="white">
+                  Delete
+                </ThemedText>
+              </TouchableOpacity>
+            </View>
+          </BottomSheetView>
+        </BottomSheetModal>
+      );
+    },
+  ),
+);
+
+DeleteCategoryModal.displayName = "DeleteCategoryModal";
+
 const CustomCategoriesCard = React.memo(
   ({ categories, onAdd, onEdit, onDelete }: CustomCategoriesCardProps) => {
     const theme = useTheme();
     const styles = useMemo(() => createStyles({ theme }), [theme]);
     const modalRef = useRef<ModalAddCategoryRef>(null);
+    const deleteModalRef = useRef<DeleteCategoryModalRef>(null);
 
     const handleEdit = (category: CustomCategory) => {
       modalRef.current?.show(category);
+    };
+
+    const handleDeletePress = (category: CustomCategory) => {
+      deleteModalRef.current?.show(category);
     };
 
     const handleSave = (
@@ -137,7 +248,7 @@ const CustomCategoriesCard = React.memo(
                   key={category.id}
                   category={category}
                   onEdit={handleEdit}
-                  onDelete={onDelete}
+                  onDeletePress={handleDeletePress}
                   styles={styles}
                   theme={theme}
                 />
@@ -154,6 +265,12 @@ const CustomCategoriesCard = React.memo(
         </View>
 
         <ModalAddCategory ref={modalRef} onSave={handleSave} />
+        <DeleteCategoryModal
+          ref={deleteModalRef}
+          onConfirm={onDelete}
+          styles={styles}
+          theme={theme}
+        />
       </>
     );
   },
