@@ -1,27 +1,29 @@
-import {
-  TRANSACTION_CATEGORIES,
-  TransactionCategoryId,
-} from "@/src/constants/categories";
+import { TRANSACTION_CATEGORIES } from "@/src/constants/categories";
 import { Theme } from "@/src/constants/theme";
 import ScanReceiptCard from "@/src/features/ai/components/ScanReceiptCard";
+import { useReceiptScanner } from "@/src/features/ai/hooks/useReceiptScanner";
 import AddExpenseButton from "@/src/features/transaction/components/AddExpenseButton";
 import CategoryPicker from "@/src/features/transaction/components/CategoryPicker";
 import DescriptionInputCard from "@/src/features/transaction/components/DescriptionInputCard";
 import ModalSelectDate from "@/src/features/transaction/components/ModalSelectDate";
-import ModalSelectPayment, {
-  PaymentMethod,
-} from "@/src/features/transaction/components/ModalSelectPayment";
+import ModalSelectPayment from "@/src/features/transaction/components/ModalSelectPayment";
 import NotesInputCard from "@/src/features/transaction/components/NotesInputCard";
 import TransactionMetaFields from "@/src/features/transaction/components/TransactionMetaFields";
+import { useTransactionForm } from "@/src/features/transaction/hooks/useTransactionForm";
 import AmountInput from "@/src/shared/components/amount-input/AmountInput";
 import Spacer from "@/src/shared/components/spacer/Spacer";
 import { ThemedText } from "@/src/shared/components/themed-text/ThemedText";
 import { ThemedView } from "@/src/shared/components/themed-view/ThemedView";
 import { useTheme } from "@/src/shared/hooks/useThemeController";
-import { useMemo, useRef, useState } from "react";
-import { Platform, StyleSheet, View } from "react-native";
+import { useMemo, useRef } from "react";
+import { Alert, Platform, StyleSheet, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context";
+
+type ModalRef = {
+  hide: () => void;
+  show: () => void;
+};
 
 const formatDateLabel = (date: Date) =>
   new Intl.DateTimeFormat("en-US", {
@@ -31,33 +33,48 @@ const formatDateLabel = (date: Date) =>
   }).format(date);
 
 export default function AddScreen() {
-  const paymentSheetRef = useRef(null);
-  const dateSheetRef = useRef(null);
+  const paymentSheetRef = useRef<ModalRef>(null);
+  const dateSheetRef = useRef<ModalRef>(null);
   const insets = useSafeAreaInsets();
   const theme = useTheme();
   const styles = useMemo(
     () => createStyles({ theme, insets }),
     [theme, insets],
   );
+  const { scan } = useReceiptScanner();
+  const {
+    amount,
+    applyCategorySuggestion,
+    description,
+    isAddExpenseDisabled,
+    notes,
+    selectedCategoryId,
+    selectedDate,
+    selectedPayment,
+    setAmount,
+    setDescription,
+    setNotes,
+    setSelectedCategoryId,
+    setSelectedDate,
+    setSelectedPayment,
+    submitTransaction,
+  } = useTransactionForm();
 
-  const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
-  const [notes, setNotes] = useState("");
-  const [selectedCategoryId, setSelectedCategoryId] =
-    useState<TransactionCategoryId | null>(null);
-  const [selectedDate, setSelectedDate] = useState(() => new Date());
-  const [selectedPayment, setSelectedPayment] = useState<PaymentMethod | null>(
-    null,
-  );
+  const handleScanReceipt = async () => {
+    const result = await scan();
 
-  const isAddExpenseDisabled = !amount.trim() || !selectedCategoryId;
+    if (!result) {
+      return;
+    }
 
-  const handleScanReceipt = () => {
-    // TODO: integrate camera / AI OCR
+    if (result.amount) setAmount(result.amount);
+    if (result.description) setDescription(result.description);
+    if (result.notes) setNotes(result.notes);
+    if (result.categoryId) setSelectedCategoryId(result.categoryId);
   };
 
   const handleApplySuggestion = () => {
-    setSelectedCategoryId("foodDining");
+    applyCategorySuggestion("foodDining");
   };
 
   const handleSelectDate = () => {
@@ -68,8 +85,12 @@ export default function AddScreen() {
     paymentSheetRef?.current?.show();
   };
 
-  const handleAddExpense = () => {
-    // TODO: validate and persist transaction
+  const handleAddExpense = async () => {
+    const isSuccessful = await submitTransaction();
+
+    if (isSuccessful) {
+      Alert.alert("Expense Added", "Your transaction has been saved.");
+    }
   };
 
   return (

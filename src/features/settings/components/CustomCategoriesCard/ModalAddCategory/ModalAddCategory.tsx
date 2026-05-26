@@ -35,13 +35,14 @@ const ModalAddCategory = React.memo(
       const [name, setName] = useState("");
       const [selectedColor, setSelectedColor] = useState(DEFAULT_COLOR);
       const [selectedIcon, setSelectedIcon] = useState(DEFAULT_ICON);
-      const [isEditMode, setIsEditMode] = useState(false);
+      const [editingCategory, setEditingCategory] =
+        useState<CustomCategory | null>(null);
 
       const resetDraft = () => {
         setName("");
         setSelectedColor(DEFAULT_COLOR);
         setSelectedIcon(DEFAULT_ICON);
-        setIsEditMode(false);
+        setEditingCategory(null);
       };
 
       const showModal = useCallback((category?: CustomCategory) => {
@@ -50,7 +51,7 @@ const ModalAddCategory = React.memo(
           setName(category.name);
           setSelectedColor(category.color);
           setSelectedIcon(category.icon);
-          setIsEditMode(true);
+          setEditingCategory(category);
         } else {
           resetDraft();
         }
@@ -68,7 +69,10 @@ const ModalAddCategory = React.memo(
 
       const handleSave = () => {
         if (!name.trim()) return;
-        onSave({ name: name.trim(), color: selectedColor, icon: selectedIcon });
+        onSave(
+          { name: name.trim(), color: selectedColor, icon: selectedIcon },
+          editingCategory ?? undefined,
+        );
         hideModal();
         resetDraft();
       };
@@ -99,7 +103,7 @@ const ModalAddCategory = React.memo(
           <BottomSheetView style={styles.contentContainer}>
             <View style={styles.header}>
               <ThemedText type="titleSmall">
-                {isEditMode ? "Edit Category" : "Add Category"}
+                {editingCategory ? "Edit Category" : "Add Category"}
               </ThemedText>
             </View>
 
@@ -176,7 +180,7 @@ const ModalAddCategory = React.memo(
               disabled={!canSave}
             >
               <ThemedText type="bodyMediumSemibold" colorVariant="white">
-                {isEditMode ? "Save Changes" : "Add Category"}
+                {editingCategory ? "Save Changes" : "Add Category"}
               </ThemedText>
             </TouchableOpacity>
           </BottomSheetView>

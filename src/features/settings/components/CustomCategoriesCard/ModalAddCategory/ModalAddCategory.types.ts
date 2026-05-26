@@ -12,7 +12,10 @@ export type ModalAddCategoryRef = {
 };
 
 export type ModalAddCategoryProps = {
-  onSave: (data: Omit<CustomCategory, "id" | "transactionCount">) => void;
+  onSave: (
+    data: Omit<CustomCategory, "id" | "transactionCount">,
+    currentCategory?: CustomCategory,
+  ) => void;
 };
 
 export const CATEGORY_COLOR_OPTIONS = [
